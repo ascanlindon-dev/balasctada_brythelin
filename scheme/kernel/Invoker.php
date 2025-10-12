@@ -222,6 +222,7 @@ class Invoker {
 		$module_or_nested = array_shift($parts);
 		$nested = implode('/', $parts);
 
+		// Check if it's a module view first
 		if ($module_or_nested && file_exists(APP_DIR . "modules/{$module_or_nested}/views/" . ($nested ? "{$nested}/" : '') . "{$file}.php")) {
 			$path = APP_DIR . "modules/{$module_or_nested}/views/" . ($nested ? "{$nested}/" : '') . "{$file}.php";
 			require $path;
@@ -229,7 +230,14 @@ class Invoker {
 			return;
 		}
 
-		$path = APP_DIR . "views/" . ($nested ? "{$module_or_nested}/{$nested}/" : '') . "{$file}.php";
+		// Check app/views with full path
+		if ($module_or_nested) {
+			$full_path = $module_or_nested . ($nested ? "/{$nested}" : '');
+			$path = APP_DIR . "views/{$full_path}/{$file}.php";
+		} else {
+			$path = APP_DIR . "views/{$file}.php";
+		}
+		
 		if (file_exists($path)) {
 			require $path;
 			echo ob_get_clean();
