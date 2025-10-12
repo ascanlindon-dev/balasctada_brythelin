@@ -281,23 +281,132 @@
             border-left: 4px solid #28a745;
         }
         
-        .test-info {
+        .profile-section {
             background: white;
             padding: 2rem;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            margin-top: 2rem;
+            margin-bottom: 2rem;
         }
         
-        .test-info h3 {
+        .profile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f8f9fa;
+        }
+        
+        .profile-info h2 {
             color: #333;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
         
-        .test-details {
-            background: #f8f9fa;
-            padding: 1rem;
+        .profile-info p {
+            color: #666;
+            margin: 0;
+        }
+        
+        .profile-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #e9ecef;
+            background: white;
             border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .order-item, .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .order-info, .cart-info {
+            flex: 1;
+        }
+        
+        .order-id, .product-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .order-status, .product-details {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .order-amount, .cart-price {
+            font-weight: bold;
+            color: #28a745;
+        }
+        
+        .cart-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .quantity-input {
+            width: 60px;
+            padding: 0.25rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .btn-sm {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.8rem;
+        }
+        
+        .cart-total {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 1rem;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+        
+        .empty-state h3 {
+            margin-bottom: 0.5rem;
+        }
         }
         
         .test-details p {
@@ -322,21 +431,111 @@
     </nav>
     
     <div class="container">
-        <div class="welcome-card">
-            <h1>Welcome to Your Product Dashboard</h1>
-            <p>Manage your products, view sales analytics, and track your inventory all in one place. This dashboard confirms that the registration and login system is working correctly with your buyers database.</p>
-            
-            <div class="user-info">
-                <strong>Buyer ID:</strong> <?= htmlspecialchars($user['buyer_id']) ?><br>
-                <strong>Email:</strong> <?= htmlspecialchars($user['email']) ?><br>
-                <strong>Full Name:</strong> <?= htmlspecialchars($user['full_name']) ?><br>
-                <strong>Phone:</strong> <?= htmlspecialchars($user['phone_number']) ?>
+        <!-- Buyer Profile Section -->
+        <div class="profile-section">
+            <div class="profile-header">
+                <div class="profile-info">
+                    <h2>Welcome, <?= htmlspecialchars($user['full_name']) ?>!</h2>
+                    <p>Email: <?= htmlspecialchars($user['email']) ?> | Phone: <?= htmlspecialchars($user['phone_number']) ?></p>
+                </div>
+                <div>
+                    <a href="<?= site_url('auth/logout') ?>" class="action-btn">Logout</a>
+                </div>
             </div>
-            
-            <div class="success" style="margin-top: 1rem;">
-                ✅ <strong>Registration & Login System Working!</strong><br>
-                Your account data is successfully stored and retrieved from the buyers database.<br>
-                <small>Registered: <?= isset($current_user_registration) ? date('M j, Y', strtotime($current_user_registration)) : 'Recently' ?></small>
+
+            <div class="profile-tabs">
+                <button class="tab-btn active" onclick="showTab('orders')">My Orders</button>
+                <button class="tab-btn" onclick="showTab('cart')">My Cart</button>
+                <button class="tab-btn" onclick="showTab('products')">Browse Products</button>
+            </div>
+
+            <!-- Orders Tab -->
+            <div id="orders" class="tab-content active">
+                <h3>My Orders</h3>
+                <?php if (!empty($orders)): ?>
+                    <?php foreach ($orders as $order): ?>
+                        <div class="order-item">
+                            <div class="order-info">
+                                <div class="order-id">Order #<?= $order['id'] ?></div>
+                                <div class="order-status">Status: <?= ucfirst($order['status']) ?> | Date: <?= date('M d, Y', strtotime($order['created_at'])) ?></div>
+                            </div>
+                            <div class="order-amount">$<?= number_format($order['total_amount'], 2) ?></div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="empty-state">
+                        <h3>No Orders Yet</h3>
+                        <p>You haven't placed any orders yet. Start shopping to see your orders here!</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+
+            <!-- Cart Tab -->
+            <div id="cart" class="tab-content">
+                <h3>My Cart</h3>
+                <?php if (!empty($cart_items)): ?>
+                    <?php foreach ($cart_items as $item): ?>
+                        <div class="cart-item">
+                            <div class="cart-info">
+                                <div class="product-name"><?= htmlspecialchars($item['name']) ?></div>
+                                <div class="product-details">Price: $<?= number_format($item['price'], 2) ?> | Subtotal: $<?= number_format($item['total_price'], 2) ?></div>
+                            </div>
+                            <div class="cart-controls">
+                                <form action="<?= site_url('auth/update_cart') ?>" method="POST" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                                    <input type="hidden" name="cart_id" value="<?= $item['id'] ?>">
+                                    <input type="number" name="quantity" value="<?= $item['quantity'] ?>" min="1" class="quantity-input">
+                                    <button type="submit" class="action-btn btn-sm">Update</button>
+                                </form>
+                                <a href="<?= site_url('auth/remove_from_cart/' . $item['id']) ?>" 
+                                   class="action-btn btn-sm" 
+                                   style="background: #dc3545;"
+                                   onclick="return confirm('Remove this item from cart?')">Remove</a>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                    
+                    <div class="cart-total">
+                        <h3>Total: $<?= number_format($cart_total, 2) ?></h3>
+                        <p>Cart contains <?= count($cart_items) ?> item(s)</p>
+                    </div>
+                <?php else: ?>
+                    <div class="empty-state">
+                        <h3>Your Cart is Empty</h3>
+                        <p>Add some products to your cart to see them here!</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+
+            <!-- Products Tab -->
+            <div id="products" class="tab-content">
+                <h3>Browse Products</h3>
+                <div class="products-grid">
+                    <?php if (!empty($products)): ?>
+                        <?php foreach ($products as $product): ?>
+                            <div class="product-card">
+                                <?php if (!empty($product['image_url'])): ?>
+                                    <img src="<?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="product-image" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">
+                                <?php else: ?>
+                                    <div class="product-image">🎨</div>
+                                <?php endif; ?>
+                                <div class="product-title"><?= htmlspecialchars($product['name']) ?></div>
+                                <div class="product-description"><?= htmlspecialchars($product['description'] ?: 'No description available') ?></div>
+                                <div class="product-price">$<?= number_format($product['price'], 2) ?></div>
+                                <div style="margin-top: 1rem;">
+                                    <form action="<?= site_url('auth/add_to_cart/' . $product['id']) ?>" method="POST" style="display: flex; gap: 0.5rem; align-items: center;">
+                                        <input type="number" name="quantity" value="1" min="1" max="<?= $product['stock'] ?>" class="quantity-input">
+                                        <button type="submit" class="action-btn btn-sm">Add to Cart</button>
+                                    </form>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="empty-state">
+                            <h3>No Products Available</h3>
+                            <p>The admin hasn't added any products yet. Check back soon!</p>
+                        </div>
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
         
@@ -420,5 +619,23 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tab buttons
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            tabButtons.forEach(button => button.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+    </script>
 </body>
 </html>

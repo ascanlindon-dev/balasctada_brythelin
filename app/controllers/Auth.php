@@ -7,6 +7,7 @@ class Auth extends Controller {
         parent::__construct();
         $this->call->model('User');
         $this->call->model('Product');
+        $this->call->model('Order');
     }
     
     /**
@@ -102,10 +103,16 @@ class Auth extends Controller {
             $data['total_users'] = $this->User->get_total_users();
             $data['current_user_registration'] = $this->User->get_user_registration_date($data['user']['buyer_id']);
             $data['products'] = $this->Product->get_active_products();
+            $data['orders'] = $this->Order->get_orders_by_buyer($data['user']['buyer_id']);
+            $data['cart_items'] = $this->Order->get_cart_items($data['user']['buyer_id']);
+            $data['cart_total'] = $this->Order->get_cart_total($data['user']['buyer_id']);
         } catch (Exception $e) {
             $data['total_users'] = 0;
             $data['current_user_registration'] = 'Unknown';
             $data['products'] = array();
+            $data['orders'] = array();
+            $data['cart_items'] = array();
+            $data['cart_total'] = 0;
         }
         
         $this->call->view('auth/dashboard', $data);
@@ -340,6 +347,93 @@ class Auth extends Controller {
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
+    }
+    
+    /**
+     * Add product to cart
+     */
+    public function add_to_cart($product_id = null) {
+        if (!$this->call->session->userdata('buyer_id')) {
+            redirect('auth/login');
+            return;
+        }
+        
+        if (!$product_id) {
+            redirect('auth/dashboard');
+            return;
+        }
+        
+        try {
+            $buyer_id = $this->call->session->userdata('buyer_id');
+            $quantity = $this->call->io->post('quantity') ?: 1;
+            
+            if ($this->Order->add_to_cart($buyer_id, $product_id, $quantity)) {
+                $this->call->session->set_flashdata('success', 'Product added to cart successfully!');
+            } else {
+                $this->call->session->set_flashdata('error', 'Failed to add product to cart');
+            }
+        } catch (Exception $e) {
+            $this->call->session->set_flashdata('error', 'Error: ' . $e->getMessage());
+        }
+        
+        redirect('auth/dashboard');
+    }
+    
+    /**
+     * Remove item from cart
+     */
+    public function remove_from_cart($cart_id = null) {
+        if (!$this->call->session->userdata('buyer_id')) {
+            redirect('auth/login');
+            return;
+        }
+        
+        if (!$cart_id) {
+            redirect('auth/dashboard');
+            return;
+        }
+        
+        try {
+            if ($this->Order->remove_from_cart($cart_id)) {
+                $this->call->session->set_flashdata('success', 'Item removed from cart');
+            } else {
+                $this->call->session->set_flashdata('error', 'Failed to remove item from cart');
+            }
+        } catch (Exception $e) {
+            $this->call->session->set_flashdata('error', 'Error: ' . $e->getMessage());
+        }
+        
+        redirect('auth/dashboard');
+    }
+    
+    /**
+     * Update cart quantity
+     */
+    public function update_cart() {
+        if (!$this->call->session->userdata('buyer_id')) {
+            redirect('auth/login');
+            return;
+        }
+        
+        $cart_id = $this->call->io->post('cart_id');
+        $quantity = $this->call->io->post('quantity');
+        
+        if (!$cart_id || !$quantity) {
+            redirect('auth/dashboard');
+            return;
+        }
+        
+        try {
+            if ($this->Order->update_cart_quantity($cart_id, $quantity)) {
+                $this->call->session->set_flashdata('success', 'Cart updated successfully');
+            } else {
+                $this->call->session->set_flashdata('error', 'Failed to update cart');
+            }
+        } catch (Exception $e) {
+            $this->call->session->set_flashdata('error', 'Error: ' . $e->getMessage());
+        }
+        
+        redirect('auth/dashboard');
     }
 }
 ?>

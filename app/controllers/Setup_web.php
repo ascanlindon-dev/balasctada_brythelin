@@ -113,6 +113,66 @@ class Setup_web extends Controller {
                 echo "<div class='success'>✓ Products table exists</div>";
             }
             
+            // Check if orders table exists
+            echo "<h2>2c. Checking orders table...</h2>";
+            $stmt = $this->call->database->raw("SHOW TABLES LIKE 'orders'");
+            $query = $stmt->fetchAll();
+            $orders_table_exists = count($query) > 0;
+            
+            if (!$orders_table_exists) {
+                echo "<div class='error'>✗ Orders table does not exist. Creating...</div>";
+                
+                // Create orders table
+                $create_orders_table = "
+                CREATE TABLE orders (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    buyer_id INT NOT NULL,
+                    total_amount DECIMAL(10,2) NOT NULL,
+                    status ENUM('pending', 'processing', 'shipped', 'delivered', 'cancelled') DEFAULT 'pending',
+                    shipping_address TEXT,
+                    created_at DATETIME NULL,
+                    FOREIGN KEY (buyer_id) REFERENCES buyers(buyer_id)
+                )";
+                
+                if ($this->call->database->raw($create_orders_table)) {
+                    echo "<div class='success'>✓ Orders table created successfully</div>";
+                } else {
+                    echo "<div class='error'>✗ Failed to create orders table</div>";
+                }
+            } else {
+                echo "<div class='success'>✓ Orders table exists</div>";
+            }
+            
+            // Check if cart table exists
+            echo "<h2>2d. Checking cart table...</h2>";
+            $stmt = $this->call->database->raw("SHOW TABLES LIKE 'cart'");
+            $query = $stmt->fetchAll();
+            $cart_table_exists = count($query) > 0;
+            
+            if (!$cart_table_exists) {
+                echo "<div class='error'>✗ Cart table does not exist. Creating...</div>";
+                
+                // Create cart table
+                $create_cart_table = "
+                CREATE TABLE cart (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    buyer_id INT NOT NULL,
+                    product_id INT NOT NULL,
+                    quantity INT DEFAULT 1,
+                    created_at DATETIME NULL,
+                    FOREIGN KEY (buyer_id) REFERENCES buyers(buyer_id),
+                    FOREIGN KEY (product_id) REFERENCES products(id)
+                )";
+                
+                if ($this->call->database->raw($create_cart_table)) {
+                    echo "<div class='success'>✓ Cart table created successfully</div>";
+                } else {
+                    echo "<div class='error'>✗ Failed to create cart table</div>";
+                }
+            } else {
+                echo "<div class='success'>✓ Cart table exists</div>";
+            }
+            
             // Check for test users
             echo "<h2>3. Checking admin and test users...</h2>";
             

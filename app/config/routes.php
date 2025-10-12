@@ -60,6 +60,11 @@ $router->get('/auth/debug_password/(:any)/(:any)', 'Auth::debug_password/$1/$2')
 $router->get('/auth/debug_users', 'Auth::debug_users');
 $router->get('/auth/create_test_user', 'Auth::create_test_user');
 
+// Cart routes
+$router->post('/auth/add_to_cart/(:any)', 'Auth::add_to_cart/$1');
+$router->get('/auth/remove_from_cart/(:any)', 'Auth::remove_from_cart/$1');
+$router->post('/auth/update_cart', 'Auth::update_cart');
+
 // Admin routes
 $router->get('/admin/dashboard', 'Admin::dashboard');
 $router->get('/admin/products', 'Admin::products');
