@@ -912,90 +912,9 @@
                 </div>
             </div>
                 
-                <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-                    <div class="stat-card">
-                        <div class="stat-icon">📊</div>
-                        <div class="stat-title">Total Orders</div>
-                        <div class="stat-value"><?= isset($buying_stats['total_orders']) ? $buying_stats['total_orders'] : 0 ?></div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-icon">💰</div>
-                        <div class="stat-title">Total Spent</div>
-                        <div class="stat-value">$<?= isset($buying_stats['total_spent']) ? number_format($buying_stats['total_spent'], 2) : '0.00' ?></div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-icon">📈</div>
-                        <div class="stat-title">Average Order</div>
-                        <div class="stat-value">$<?= isset($buying_stats['average_order']) ? number_format($buying_stats['average_order'], 2) : '0.00' ?></div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-icon">🛒</div>
-                        <div class="stat-title">Cart Items</div>
-                        <div class="stat-value"><?= isset($buying_stats['cart_items']) ? $buying_stats['cart_items'] : 0 ?></div>
-                    </div>
-                </div>
 
-                <div class="buying-details">
-                    <div class="detail-section">
-                        <h4>📋 Order Status Breakdown</h4>
-                        <?php if (!empty($buying_stats['orders_by_status'])): ?>
-                            <div class="status-grid">
-                                <?php foreach ($buying_stats['orders_by_status'] as $status => $count): ?>
-                                    <div class="status-item">
-                                        <span class="status-label"><?= ucfirst($status) ?>:</span>
-                                        <span class="status-count"><?= $count ?> order(s)</span>
-                                    </div>
-                                <?php endforeach; ?>
-                            </div>
-                        <?php else: ?>
-                            <p>No orders placed yet.</p>
-                        <?php endif; ?>
-                    </div>
 
-                    <div class="detail-section">
-                        <h4>🕒 Recent Activity</h4>
-                        <?php if (!empty($recent_orders)): ?>
-                            <?php foreach ($recent_orders as $order): ?>
-                                <div class="activity-item">
-                                    <div class="activity-info">
-                                        <div class="activity-title">Order #<?= $order['id'] ?> - $<?= number_format($order['total_amount'], 2) ?></div>
-                                        <div class="activity-meta">
-                                            Status: <span class="status-<?= $order['status'] ?>"><?= ucfirst($order['status']) ?></span> | 
-                                            Date: <?= date('M d, Y', strtotime($order['created_at'])) ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <p>No recent orders to display.</p>
-                        <?php endif; ?>
-                    </div>
 
-                    <div class="detail-section">
-                        <h4>👤 Account Information</h4>
-                        <div class="account-info">
-                            <div class="info-row">
-                                <span class="info-label">Account ID:</span>
-                                <span class="info-value"><?= htmlspecialchars($user['buyer_id']) ?></span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Email:</span>
-                                <span class="info-value"><?= htmlspecialchars($user['email']) ?></span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Phone:</span>
-                                <span class="info-value"><?= htmlspecialchars($user['phone_number']) ?></span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Member Since:</span>
-                                <span class="info-value"><?= isset($current_user_registration) ? date('M d, Y', strtotime($current_user_registration)) : 'Recently' ?></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <!-- Orders Tab -->
