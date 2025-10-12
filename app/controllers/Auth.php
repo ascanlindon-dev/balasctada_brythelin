@@ -18,6 +18,7 @@ class Auth extends Controller {
         }
         
         $data['error'] = $this->call->session->flashdata('error');
+        $data['success'] = $this->call->session->flashdata('success');
         $this->call->view('auth/login', $data);
     }
     
@@ -111,33 +112,33 @@ class Auth extends Controller {
         // Basic validation
         if (empty($full_name) || empty($email) || empty($phone_number) || empty($password) || empty($confirm_password)) {
             $this->call->session->set_flashdata('error', 'Please fill in all fields');
-            redirect('auth/register');
+            redirect('auth/login');
             return;
         }
         
         if ($password !== $confirm_password) {
             $this->call->session->set_flashdata('error', 'Passwords do not match');
-            redirect('auth/register');
+            redirect('auth/login');
             return;
         }
         
         if (strlen($password) < 6) {
             $this->call->session->set_flashdata('error', 'Password must be at least 6 characters');
-            redirect('auth/register');
+            redirect('auth/login');
             return;
         }
         
         // Validate email format
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->call->session->set_flashdata('error', 'Please enter a valid email address');
-            redirect('auth/register');
+            redirect('auth/login');
             return;
         }
         
         // Check if email already exists
         if ($this->User->email_exists($email)) {
             $this->call->session->set_flashdata('error', 'Email already exists');
-            redirect('auth/register');
+            redirect('auth/login');
             return;
         }
         
@@ -151,11 +152,11 @@ class Auth extends Controller {
         );
         
         if ($this->User->create_user($user_data)) {
-            $this->call->session->set_flashdata('success', 'Registration successful! Please login.');
+            $this->call->session->set_flashdata('success', 'Registration successful! Please login with your new account.');
             redirect('auth/login');
         } else {
             $this->call->session->set_flashdata('error', 'Registration failed. Please try again.');
-            redirect('auth/register');
+            redirect('auth/login');
         }
     }
 }

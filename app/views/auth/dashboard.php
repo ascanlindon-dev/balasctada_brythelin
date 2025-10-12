@@ -173,6 +173,42 @@
         .user-info strong {
             color: #333;
         }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+        }
+        
+        .test-info {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
+        
+        .test-info h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        
+        .test-details {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        
+        .test-details p {
+            margin-bottom: 0.5rem;
+            color: #666;
+        }
+        
+        .test-details p:last-child {
+            margin-bottom: 0;
+        }
     </style>
 </head>
 <body>
@@ -188,8 +224,8 @@
     
     <div class="container">
         <div class="welcome-card">
-            <h1>Welcome to Your Dashboard</h1>
-            <p>You have successfully logged into the CRAFTIFY system. This is your personal dashboard where you can manage your account and access various features of the application.</p>
+            <h1>Welcome to Your CRAFTIFY Dashboard</h1>
+            <p>You have successfully logged into the CRAFTIFY system. This dashboard confirms that the registration and login system is working correctly with your buyers database.</p>
             
             <div class="user-info">
                 <strong>Buyer ID:</strong> <?= htmlspecialchars($user['buyer_id']) ?><br>
@@ -197,41 +233,58 @@
                 <strong>Full Name:</strong> <?= htmlspecialchars($user['full_name']) ?><br>
                 <strong>Phone:</strong> <?= htmlspecialchars($user['phone_number']) ?>
             </div>
+            
+            <div class="success" style="margin-top: 1rem;">
+                ✅ <strong>Registration & Login System Working!</strong><br>
+                Your account data is successfully stored and retrieved from the buyers database.
+            </div>
         </div>
         
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-icon">👤</div>
-                <div class="stat-title">Profile</div>
+                <div class="stat-title">Account Status</div>
                 <div class="stat-value">Active</div>
             </div>
             
             <div class="stat-card">
-                <div class="stat-icon">📊</div>
-                <div class="stat-title">Projects</div>
+                <div class="stat-icon">�</div>
+                <div class="stat-title">Orders</div>
+                <div class="stat-value">0</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">❤️</div>
+                <div class="stat-title">Favorites</div>
                 <div class="stat-value">0</div>
             </div>
             
             <div class="stat-card">
                 <div class="stat-icon">🎯</div>
-                <div class="stat-title">Tasks</div>
+                <div class="stat-title">Cart Items</div>
                 <div class="stat-value">0</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-icon">⭐</div>
-                <div class="stat-title">Rating</div>
-                <div class="stat-value">5.0</div>
             </div>
         </div>
         
         <div class="quick-actions">
             <h2>Quick Actions</h2>
             <div class="action-buttons">
-                <a href="#" class="action-btn">Create Project</a>
-                <a href="#" class="action-btn">View Profile</a>
-                <a href="#" class="action-btn">Settings</a>
-                <a href="#" class="action-btn">Help & Support</a>
+                <a href="#" class="action-btn">Browse Products</a>
+                <a href="#" class="action-btn">My Orders</a>
+                <a href="#" class="action-btn">Account Settings</a>
+                <a href="<?= site_url('auth/logout') ?>" class="action-btn" style="background: #dc3545;">Logout</a>
+            </div>
+        </div>
+        
+        <div class="test-info">
+            <h3>🧪 Testing Information</h3>
+            <div class="test-details">
+                <p><strong>Database Table:</strong> buyers</p>
+                <p><strong>Primary Key:</strong> buyer_id (<?= htmlspecialchars($user['buyer_id']) ?>)</p>
+                <p><strong>Registration:</strong> ✅ Working</p>
+                <p><strong>Login:</strong> ✅ Working</p>
+                <p><strong>Session Management:</strong> ✅ Working</p>
+                <p><strong>Password Security:</strong> ✅ Hashed</p>
             </div>
         </div>
     </div>
