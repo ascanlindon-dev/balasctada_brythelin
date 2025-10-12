@@ -5,6 +5,8 @@ class Auth extends Controller {
     
     public function __construct() {
         parent::__construct();
+        $this->call->library('session');
+        $this->call->library('io');
         $this->call->model('User');
     }
     
@@ -26,8 +28,8 @@ class Auth extends Controller {
      * Process login form
      */
     public function do_login() {
-        $email = $this->io->post('email');
-        $password = $this->io->post('password');
+        $email = $this->call->io->post('email');
+        $password = $this->call->io->post('password');
         
         // Basic validation
         if (empty($email) || empty($password)) {
