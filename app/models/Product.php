@@ -12,7 +12,7 @@ class Product extends Model {
      */
     public function get_all_products() {
         try {
-            return $this->db->table('products')->order_by('product_id', 'DESC')->get_all();
+            return $this->db->table('products')->order_by('id', 'DESC')->get_all();
         } catch (Exception $e) {
             throw new Exception("Database error in get_all_products: " . $e->getMessage());
         }
@@ -21,9 +21,9 @@ class Product extends Model {
     /**
      * Get product by ID
      */
-    public function get_product_by_id($product_id) {
+    public function get_product_by_id($id) {
         try {
-            return $this->db->table('products')->where('product_id', $product_id)->get();
+            return $this->db->table('products')->where('id', $id)->get();
         } catch (Exception $e) {
             throw new Exception("Database error in get_product_by_id: " . $e->getMessage());
         }
@@ -43,9 +43,9 @@ class Product extends Model {
     /**
      * Update product
      */
-    public function update_product($product_id, $data) {
+    public function update_product($id, $data) {
         try {
-            return $this->db->table('products')->where('product_id', $product_id)->update($data);
+            return $this->db->table('products')->where('id', $id)->update($data);
         } catch (Exception $e) {
             throw new Exception("Database error in update_product: " . $e->getMessage());
         }
@@ -54,9 +54,9 @@ class Product extends Model {
     /**
      * Delete product
      */
-    public function delete_product($product_id) {
+    public function delete_product($id) {
         try {
-            return $this->db->table('products')->where('product_id', $product_id)->delete();
+            return $this->db->table('products')->where('id', $id)->delete();
         } catch (Exception $e) {
             throw new Exception("Database error in delete_product: " . $e->getMessage());
         }
@@ -85,13 +85,24 @@ class Product extends Model {
     }
     
     /**
-     * Get active products
+     * Get active products (since your schema doesn't have status, get all products)
      */
     public function get_active_products() {
         try {
-            return $this->db->table('products')->where('status', 'active')->get_all();
+            return $this->db->table('products')->get_all();
         } catch (Exception $e) {
             throw new Exception("Database error in get_active_products: " . $e->getMessage());
+        }
+    }
+    
+    /**
+     * Get products by creator
+     */
+    public function get_products_by_creator($created_by) {
+        try {
+            return $this->db->table('products')->where('created_by', $created_by)->get_all();
+        } catch (Exception $e) {
+            throw new Exception("Database error in get_products_by_creator: " . $e->getMessage());
         }
     }
 }

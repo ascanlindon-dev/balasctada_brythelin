@@ -328,19 +328,16 @@
                             
                             <div class="product-details">
                                 <div class="product-price">$<?= number_format($product['price'], 2) ?></div>
-                                <span class="product-status status-<?= $product['status'] ?>">
-                                    <?= ucfirst($product['status']) ?>
-                                </span>
                             </div>
                             
                             <div class="product-meta">
-                                Stock: <?= $product['stock_quantity'] ?> | 
-                                Category: <?= htmlspecialchars($product['category'] ?: 'Uncategorized') ?>
+                                Stock: <?= $product['stock'] ?> | 
+                                Created by: <?= htmlspecialchars($product['created_by']) ?>
                             </div>
                             
                             <div class="product-actions">
-                                <a href="<?= site_url('admin/edit_product/' . $product['product_id']) ?>" class="btn btn-warning btn-sm">Edit</a>
-                                <a href="<?= site_url('admin/delete_product/' . $product['product_id']) ?>" 
+                                <a href="<?= site_url('admin/edit_product/' . $product['id']) ?>" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="<?= site_url('admin/delete_product/' . $product['id']) ?>" 
                                    class="btn btn-danger btn-sm" 
                                    onclick="return confirm('Are you sure you want to delete this product?')">Delete</a>
                             </div>

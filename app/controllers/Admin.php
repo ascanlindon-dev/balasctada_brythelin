@@ -80,9 +80,7 @@ class Admin extends Controller {
         $description = $this->call->io->post('description');
         $price = $this->call->io->post('price');
         $image_url = $this->call->io->post('image_url');
-        $stock_quantity = $this->call->io->post('stock_quantity');
-        $category = $this->call->io->post('category');
-        $status = $this->call->io->post('status');
+        $stock = $this->call->io->post('stock');
         
         // Validation
         if (empty($name) || empty($price)) {
@@ -102,12 +100,9 @@ class Admin extends Controller {
                 'name' => trim($name),
                 'description' => trim($description),
                 'price' => floatval($price),
+                'stock' => intval($stock),
                 'image_url' => trim($image_url),
-                'stock_quantity' => intval($stock_quantity),
-                'category' => trim($category),
-                'status' => $status,
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s')
+                'created_by' => $this->call->session->userdata('email')
             );
             
             if ($this->Product->create_product($product_data)) {
@@ -126,13 +121,13 @@ class Admin extends Controller {
     /**
      * Edit Product Form
      */
-    public function edit_product($product_id = null) {
-        if (!$product_id) {
+    public function edit_product($id = null) {
+        if (!$id) {
             redirect('admin/products');
         }
         
         try {
-            $data['product'] = $this->Product->get_product_by_id($product_id);
+            $data['product'] = $this->Product->get_product_by_id($id);
             if (!$data['product']) {
                 $this->call->session->set_flashdata('error', 'Product not found');
                 redirect('admin/products');
@@ -151,8 +146,8 @@ class Admin extends Controller {
     /**
      * Process Edit Product
      */
-    public function do_edit_product($product_id = null) {
-        if (!$product_id) {
+    public function do_edit_product($id = null) {
+        if (!$id) {
             redirect('admin/products');
         }
         
@@ -160,20 +155,18 @@ class Admin extends Controller {
         $description = $this->call->io->post('description');
         $price = $this->call->io->post('price');
         $image_url = $this->call->io->post('image_url');
-        $stock_quantity = $this->call->io->post('stock_quantity');
-        $category = $this->call->io->post('category');
-        $status = $this->call->io->post('status');
+        $stock = $this->call->io->post('stock');
         
         // Validation
         if (empty($name) || empty($price)) {
             $this->call->session->set_flashdata('error', 'Name and price are required');
-            redirect('admin/edit_product/' . $product_id);
+            redirect('admin/edit_product/' . $id);
             return;
         }
         
         if (!is_numeric($price) || $price < 0) {
             $this->call->session->set_flashdata('error', 'Price must be a valid number');
-            redirect('admin/edit_product/' . $product_id);
+            redirect('admin/edit_product/' . $id);
             return;
         }
         
@@ -182,36 +175,33 @@ class Admin extends Controller {
                 'name' => trim($name),
                 'description' => trim($description),
                 'price' => floatval($price),
-                'image_url' => trim($image_url),
-                'stock_quantity' => intval($stock_quantity),
-                'category' => trim($category),
-                'status' => $status,
-                'updated_at' => date('Y-m-d H:i:s')
+                'stock' => intval($stock),
+                'image_url' => trim($image_url)
             );
             
-            if ($this->Product->update_product($product_id, $product_data)) {
+            if ($this->Product->update_product($id, $product_data)) {
                 $this->call->session->set_flashdata('success', 'Product updated successfully');
                 redirect('admin/products');
             } else {
                 $this->call->session->set_flashdata('error', 'Failed to update product');
-                redirect('admin/edit_product/' . $product_id);
+                redirect('admin/edit_product/' . $id);
             }
         } catch (Exception $e) {
             $this->call->session->set_flashdata('error', 'Database error: ' . $e->getMessage());
-            redirect('admin/edit_product/' . $product_id);
+            redirect('admin/edit_product/' . $id);
         }
     }
     
     /**
      * Delete Product
      */
-    public function delete_product($product_id = null) {
-        if (!$product_id) {
+    public function delete_product($id = null) {
+        if (!$id) {
             redirect('admin/products');
         }
         
         try {
-            if ($this->Product->delete_product($product_id)) {
+            if ($this->Product->delete_product($id)) {
                 $this->call->session->set_flashdata('success', 'Product deleted successfully');
             } else {
                 $this->call->session->set_flashdata('error', 'Failed to delete product');

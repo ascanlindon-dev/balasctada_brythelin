@@ -261,29 +261,14 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="stock_quantity" class="form-label">Stock Quantity</label>
-                        <input type="number" id="stock_quantity" name="stock_quantity" class="form-input" min="0" value="0">
+                        <label for="stock" class="form-label">Stock Quantity</label>
+                        <input type="number" id="stock" name="stock" class="form-input" min="1" value="1">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="image_url" class="form-label">Image URL</label>
                     <input type="url" id="image_url" name="image_url" class="form-input" placeholder="https://example.com/image.jpg">
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="category" class="form-label">Category</label>
-                        <input type="text" id="category" name="category" class="form-input" placeholder="e.g., Kitchen, Accessories">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="status" class="form-label">Status</label>
-                        <select id="status" name="status" class="form-select">
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                    </div>
                 </div>
 
                 <div class="form-actions">

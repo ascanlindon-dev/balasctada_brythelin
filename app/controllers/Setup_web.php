@@ -61,16 +61,13 @@ class Setup_web extends Controller {
                 // Create products table
                 $create_products_table = "
                 CREATE TABLE products (
-                    product_id INT(11) AUTO_INCREMENT PRIMARY KEY,
-                    name VARCHAR(255) NOT NULL,
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    name VARCHAR(100) NOT NULL,
                     description TEXT,
-                    price DECIMAL(10,2) NOT NULL,
-                    image_url VARCHAR(500),
-                    stock_quantity INT(11) DEFAULT 0,
-                    category VARCHAR(100),
-                    status ENUM('active', 'inactive') DEFAULT 'active',
-                    created_at DATETIME NULL,
-                    updated_at DATETIME NULL
+                    price DECIMAL(10, 2) NOT NULL,
+                    stock INT DEFAULT 1,
+                    image_url VARCHAR(255),
+                    created_by VARCHAR(255)
                 )";
                 
                 if ($this->call->database->raw($create_products_table)) {
@@ -82,34 +79,25 @@ class Setup_web extends Controller {
                             'name' => 'Handcrafted Wooden Bowl',
                             'description' => 'Beautiful handcrafted wooden bowl made from premium oak wood.',
                             'price' => 29.99,
+                            'stock' => 15,
                             'image_url' => 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400',
-                            'stock_quantity' => 15,
-                            'category' => 'Kitchen',
-                            'status' => 'active',
-                            'created_at' => date('Y-m-d H:i:s'),
-                            'updated_at' => date('Y-m-d H:i:s')
+                            'created_by' => 'ascanlindon@gmail.com'
                         ),
                         array(
                             'name' => 'Ceramic Coffee Mug',
                             'description' => 'Hand-painted ceramic coffee mug with unique designs.',
                             'price' => 15.50,
+                            'stock' => 30,
                             'image_url' => 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=400',
-                            'stock_quantity' => 30,
-                            'category' => 'Kitchen',
-                            'status' => 'active',
-                            'created_at' => date('Y-m-d H:i:s'),
-                            'updated_at' => date('Y-m-d H:i:s')
+                            'created_by' => 'ascanlindon@gmail.com'
                         ),
                         array(
                             'name' => 'Artisan Leather Wallet',
                             'description' => 'Premium leather wallet with multiple card slots and coin pocket.',
                             'price' => 45.00,
+                            'stock' => 20,
                             'image_url' => 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400',
-                            'stock_quantity' => 20,
-                            'category' => 'Accessories',
-                            'status' => 'active',
-                            'created_at' => date('Y-m-d H:i:s'),
-                            'updated_at' => date('Y-m-d H:i:s')
+                            'created_by' => 'ascanlindon@gmail.com'
                         )
                     );
                     

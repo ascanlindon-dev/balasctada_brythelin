@@ -268,8 +268,8 @@
                 <div class="stat-label">Listed Products</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number"><?= count(array_filter($recent_products, function($p) { return $p['status'] === 'active'; })) ?></div>
-                <div class="stat-label">Active Products</div>
+                <div class="stat-number"><?= count($recent_products) ?></div>
+                <div class="stat-label">Available Products</div>
             </div>
         </div>
 
@@ -283,9 +283,7 @@
                                 <div class="product-name"><?= htmlspecialchars($product['name']) ?></div>
                                 <div class="product-price">$<?= number_format($product['price'], 2) ?></div>
                             </div>
-                            <span class="badge <?= $product['status'] === 'active' ? 'badge-success' : 'badge-secondary' ?>">
-                                <?= ucfirst($product['status']) ?>
-                            </span>
+                            <span style="color: #28a745; font-weight: bold;">Available</span>
                         </div>
                     <?php endforeach; ?>
                     <a href="<?= site_url('admin/products') ?>" class="btn btn-primary">Manage All Products</a>

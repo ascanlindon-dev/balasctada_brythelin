@@ -243,7 +243,7 @@
                 <div class="alert alert-error"><?= htmlspecialchars($error) ?></div>
             <?php endif; ?>
 
-            <form action="<?= site_url('admin/do_edit_product/' . $product['product_id']) ?>" method="POST">
+            <form action="<?= site_url('admin/do_edit_product/' . $product['id']) ?>" method="POST">
                 <div class="form-group">
                     <label for="name" class="form-label">Product Name *</label>
                     <input type="text" id="name" name="name" class="form-input" value="<?= htmlspecialchars($product['name']) ?>" required>
@@ -261,29 +261,14 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="stock_quantity" class="form-label">Stock Quantity</label>
-                        <input type="number" id="stock_quantity" name="stock_quantity" class="form-input" min="0" value="<?= $product['stock_quantity'] ?>">
+                        <label for="stock" class="form-label">Stock Quantity</label>
+                        <input type="number" id="stock" name="stock" class="form-input" min="1" value="<?= $product['stock'] ?>">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="image_url" class="form-label">Image URL</label>
                     <input type="url" id="image_url" name="image_url" class="form-input" value="<?= htmlspecialchars($product['image_url']) ?>" placeholder="https://example.com/image.jpg">
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="category" class="form-label">Category</label>
-                        <input type="text" id="category" name="category" class="form-input" value="<?= htmlspecialchars($product['category']) ?>" placeholder="e.g., Kitchen, Accessories">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="status" class="form-label">Status</label>
-                        <select id="status" name="status" class="form-select">
-                            <option value="active" <?= $product['status'] === 'active' ? 'selected' : '' ?>>Active</option>
-                            <option value="inactive" <?= $product['status'] === 'inactive' ? 'selected' : '' ?>>Inactive</option>
-                        </select>
-                    </div>
                 </div>
 
                 <div class="form-actions">
