@@ -303,7 +303,7 @@ class Auth extends Controller {
                 'full_name' => 'Test User',
                 'email' => $test_email,
                 'phone_number' => '1234567890',
-                'password' => password_hash($test_password, PASSWORD_DEFAULT),
+                'password' => $test_password, // RAW password, not hashed
                 'created_at' => date('Y-m-d H:i:s')
             );
             
@@ -319,7 +319,7 @@ class Auth extends Controller {
                 // Test password verification immediately
                 echo "<h4>Testing password verification:</h4>";
                 $created_user = $this->User->get_user_by_email($test_email);
-                if (password_verify($test_password, $created_user['password'])) {
+                if ($test_password === $created_user['password']) {
                     echo "<p style='color: green;'>✓ Password verification works!</p>";
                 } else {
                     echo "<p style='color: red;'>✗ Password verification failed!</p>";
