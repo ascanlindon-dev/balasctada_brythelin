@@ -48,14 +48,12 @@ class Auth extends Controller {
                 return;
             }
             
-            // Debug: Check password verification
-            if (!password_verify($password, $user['password'])) {
-                // Add some debugging info
-                $debug_info = "Password verification failed for email: " . $email;
-                $this->call->session->set_flashdata('error', 'Password is incorrect. Please check your password and try again.');
-                redirect('auth/login');
-                return;
-            }
+                // Compare password in raw (not hashed) form
+                if ($password !== $user['password']) {
+                    $this->call->session->set_flashdata('error', 'Password is incorrect. Please check your password and try again.');
+                    redirect('auth/login');
+                    return;
+                }
             
             // If we reach here, login is successful
             $session_data = array(
@@ -135,50 +133,50 @@ class Auth extends Controller {
         $phone_number = $this->call->io->post('phone_number');
         $password = $this->call->io->post('password');
         $confirm_password = $this->call->io->post('confirm_password');
-        
+
         // Basic validation
         if (empty($full_name) || empty($email) || empty($phone_number) || empty($password) || empty($confirm_password)) {
             $this->call->session->set_flashdata('error', 'Please fill in all fields');
             redirect('auth/login');
             return;
         }
-        
+
+        if (strlen($password) < 8) {
+            $this->call->session->set_flashdata('error', 'Password must be 8 char');
+            redirect('auth/login');
+            return;
+        }
+
         if ($password !== $confirm_password) {
             $this->call->session->set_flashdata('error', 'Passwords do not match');
             redirect('auth/login');
             return;
         }
-        
-        if (strlen($password) < 6) {
-            $this->call->session->set_flashdata('error', 'Password must be at least 6 characters');
-            redirect('auth/login');
-            return;
-        }
-        
+
         // Validate email format
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->call->session->set_flashdata('error', 'Please enter a valid email address');
             redirect('auth/login');
             return;
         }
-        
+
         // Check if email already exists
         try {
-            if ($this->User->email_exists($email)) {
-                $this->call->session->set_flashdata('error', 'Email already exists. Please use a different email or try logging in.');
+            if ($this->User->email_exists(trim(strtolower($email)))) {
+                $this->call->session->set_flashdata('error', 'Account already registered');
                 redirect('auth/login');
                 return;
             }
-            
-            // Hash password and create user in buyers table
+
+            // Store password in raw (not hashed) form
             $user_data = array(
                 'full_name' => trim($full_name),
                 'email' => trim(strtolower($email)),
                 'phone_number' => trim($phone_number),
-                'password' => password_hash($password, PASSWORD_DEFAULT),
+                'password' => $password, // RAW password, not hashed
                 'created_at' => date('Y-m-d H:i:s')
             );
-            
+
             if ($this->User->create_user($user_data)) {
                 $this->call->session->set_flashdata('success', 'Registration successful! You can now login with your credentials.');
                 redirect('auth/login');
@@ -186,7 +184,7 @@ class Auth extends Controller {
                 $this->call->session->set_flashdata('error', 'Registration failed. Please try again.');
                 redirect('auth/login');
             }
-            
+
         } catch (Exception $e) {
             $this->call->session->set_flashdata('error', 'Database error during registration: ' . $e->getMessage() . ' - Please ensure database is set up properly.');
             redirect('auth/login');
