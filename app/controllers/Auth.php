@@ -238,5 +238,101 @@ class Auth extends Controller {
             echo "Error: " . $e->getMessage();
         }
     }
+    
+    /**
+     * Debug method to show all users in database
+     */
+    public function debug_users() {
+        try {
+            echo "<h3>Database Users Debug</h3>";
+            echo "<style>table{border-collapse:collapse;width:100%;} th,td{border:1px solid #ddd;padding:8px;text-align:left;} th{background-color:#f2f2f2;}</style>";
+            
+            // Get all users from the database
+            $result = $this->db->table('buyers')->get_all();
+            
+            if (empty($result)) {
+                echo "<p style='color: red;'>No users found in the database!</p>";
+                echo "<p>You need to register a user first. Go to: <a href='/auth/login'>Register</a></p>";
+                return;
+            }
+            
+            echo "<table>";
+            echo "<tr><th>ID</th><th>Full Name</th><th>Email</th><th>Phone</th><th>Password Hash (first 30 chars)</th><th>Created At</th></tr>";
+            
+            foreach ($result as $user) {
+                echo "<tr>";
+                echo "<td>" . htmlspecialchars($user['buyer_id']) . "</td>";
+                echo "<td>" . htmlspecialchars($user['full_name']) . "</td>";
+                echo "<td>" . htmlspecialchars($user['email']) . "</td>";
+                echo "<td>" . htmlspecialchars($user['phone_number']) . "</td>";
+                echo "<td>" . htmlspecialchars(substr($user['password'], 0, 30)) . "...</td>";
+                echo "<td>" . htmlspecialchars($user['created_at']) . "</td>";
+                echo "</tr>";
+            }
+            echo "</table>";
+            
+            echo "<h4>Test a specific user's password:</h4>";
+            echo "<p>Use the debug URL: <code>/auth/debug_password/EMAIL/PASSWORD</code></p>";
+            echo "<p>Example: <a href='/auth/debug_password/test@example.com/testpassword'>/auth/debug_password/test@example.com/testpassword</a></p>";
+            
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+            echo "<br><br>This might mean the buyers table doesn't exist yet.";
+            echo "<br>Run the setup first: <a href='/setup'>Setup Database</a>";
+        }
+    }
+    
+    /**
+     * Create a test user for debugging
+     */
+    public function create_test_user() {
+        try {
+            $test_email = 'test@craftify.com';
+            $test_password = 'test123';
+            
+            echo "<h3>Creating Test User</h3>";
+            echo "<p>Email: " . $test_email . "</p>";
+            echo "<p>Password: " . $test_password . "</p>";
+            
+            // Check if user already exists
+            if ($this->User->email_exists($test_email)) {
+                echo "<p style='color: orange;'>Test user already exists. Deleting old one first...</p>";
+                $this->db->table('buyers')->where('email', $test_email)->delete();
+            }
+            
+            // Create test user
+            $user_data = array(
+                'full_name' => 'Test User',
+                'email' => $test_email,
+                'phone_number' => '1234567890',
+                'password' => password_hash($test_password, PASSWORD_DEFAULT),
+                'created_at' => date('Y-m-d H:i:s')
+            );
+            
+            if ($this->User->create_user($user_data)) {
+                echo "<p style='color: green;'>✓ Test user created successfully!</p>";
+                echo "<p>Now try logging in with:</p>";
+                echo "<ul>";
+                echo "<li>Email: " . $test_email . "</li>";
+                echo "<li>Password: " . $test_password . "</li>";
+                echo "</ul>";
+                echo "<p><a href='/auth/login'>Go to Login Page</a></p>";
+                
+                // Test password verification immediately
+                echo "<h4>Testing password verification:</h4>";
+                $created_user = $this->User->get_user_by_email($test_email);
+                if (password_verify($test_password, $created_user['password'])) {
+                    echo "<p style='color: green;'>✓ Password verification works!</p>";
+                } else {
+                    echo "<p style='color: red;'>✗ Password verification failed!</p>";
+                }
+            } else {
+                echo "<p style='color: red;'>✗ Failed to create test user</p>";
+            }
+            
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
 }
 ?>
