@@ -59,3 +59,14 @@ $router->get('/auth/logout', 'Auth::logout');
 $router->get('/auth/debug_password/(:any)/(:any)', 'Auth::debug_password/$1/$2');
 $router->get('/auth/debug_users', 'Auth::debug_users');
 $router->get('/auth/create_test_user', 'Auth::create_test_user');
+
+// Admin routes
+$router->get('/admin/dashboard', 'Admin::dashboard');
+$router->get('/admin/products', 'Admin::products');
+$router->get('/admin/add_product', 'Admin::add_product');
+$router->post('/admin/do_add_product', 'Admin::do_add_product');
+$router->get('/admin/edit_product/(:any)', 'Admin::edit_product/$1');
+$router->post('/admin/do_edit_product/(:any)', 'Admin::do_edit_product/$1');
+$router->get('/admin/delete_product/(:any)', 'Admin::delete_product/$1');
+$router->get('/admin/buyers', 'Admin::buyers');
+$router->get('/admin/delete_buyer/(:any)', 'Admin::delete_buyer/$1');

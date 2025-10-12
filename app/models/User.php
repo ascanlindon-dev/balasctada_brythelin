@@ -103,5 +103,27 @@ class User extends Model {
             throw new Exception("Database error in get_user_registration_date: " . $e->getMessage());
         }
     }
+    
+    /**
+     * Get all users
+     */
+    public function get_all_users() {
+        try {
+            return $this->db->table('buyers')->order_by('buyer_id', 'DESC')->get_all();
+        } catch (Exception $e) {
+            throw new Exception("Database error in get_all_users: " . $e->getMessage());
+        }
+    }
+    
+    /**
+     * Delete user
+     */
+    public function delete_user($buyer_id) {
+        try {
+            return $this->db->table('buyers')->where('buyer_id', $buyer_id)->delete();
+        } catch (Exception $e) {
+            throw new Exception("Database error in delete_user: " . $e->getMessage());
+        }
+    }
 }
 ?>

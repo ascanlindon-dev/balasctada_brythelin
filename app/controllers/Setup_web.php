@@ -49,8 +49,110 @@ class Setup_web extends Controller {
                 echo "<div class='success'>✓ Buyers table exists</div>";
             }
             
+            // Check if products table exists
+            echo "<h2>2b. Checking products table...</h2>";
+            $stmt = $this->call->database->raw("SHOW TABLES LIKE 'products'");
+            $query = $stmt->fetchAll();
+            $products_table_exists = count($query) > 0;
+            
+            if (!$products_table_exists) {
+                echo "<div class='error'>✗ Products table does not exist. Creating...</div>";
+                
+                // Create products table
+                $create_products_table = "
+                CREATE TABLE products (
+                    product_id INT(11) AUTO_INCREMENT PRIMARY KEY,
+                    name VARCHAR(255) NOT NULL,
+                    description TEXT,
+                    price DECIMAL(10,2) NOT NULL,
+                    image_url VARCHAR(500),
+                    stock_quantity INT(11) DEFAULT 0,
+                    category VARCHAR(100),
+                    status ENUM('active', 'inactive') DEFAULT 'active',
+                    created_at DATETIME NULL,
+                    updated_at DATETIME NULL
+                )";
+                
+                if ($this->call->database->raw($create_products_table)) {
+                    echo "<div class='success'>✓ Products table created successfully</div>";
+                    
+                    // Add some sample products
+                    $sample_products = array(
+                        array(
+                            'name' => 'Handcrafted Wooden Bowl',
+                            'description' => 'Beautiful handcrafted wooden bowl made from premium oak wood.',
+                            'price' => 29.99,
+                            'image_url' => 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400',
+                            'stock_quantity' => 15,
+                            'category' => 'Kitchen',
+                            'status' => 'active',
+                            'created_at' => date('Y-m-d H:i:s'),
+                            'updated_at' => date('Y-m-d H:i:s')
+                        ),
+                        array(
+                            'name' => 'Ceramic Coffee Mug',
+                            'description' => 'Hand-painted ceramic coffee mug with unique designs.',
+                            'price' => 15.50,
+                            'image_url' => 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=400',
+                            'stock_quantity' => 30,
+                            'category' => 'Kitchen',
+                            'status' => 'active',
+                            'created_at' => date('Y-m-d H:i:s'),
+                            'updated_at' => date('Y-m-d H:i:s')
+                        ),
+                        array(
+                            'name' => 'Artisan Leather Wallet',
+                            'description' => 'Premium leather wallet with multiple card slots and coin pocket.',
+                            'price' => 45.00,
+                            'image_url' => 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400',
+                            'stock_quantity' => 20,
+                            'category' => 'Accessories',
+                            'status' => 'active',
+                            'created_at' => date('Y-m-d H:i:s'),
+                            'updated_at' => date('Y-m-d H:i:s')
+                        )
+                    );
+                    
+                    foreach ($sample_products as $product) {
+                        $this->call->database->table('products')->insert($product);
+                    }
+                    
+                    echo "<div class='success'>✓ Sample products added</div>";
+                } else {
+                    echo "<div class='error'>✗ Failed to create products table</div>";
+                }
+            } else {
+                echo "<div class='success'>✓ Products table exists</div>";
+            }
+            
             // Check for test users
-            echo "<h2>3. Checking test users...</h2>";
+            echo "<h2>3. Checking admin and test users...</h2>";
+            
+            // Check for main admin user
+            $stmt = $this->call->database->raw("SELECT * FROM buyers WHERE email = 'ascanlindon@gmail.com'");
+            $main_admin_check = $stmt->fetchAll();
+            
+            if (count($main_admin_check) == 0) {
+                echo "<div class='error'>✗ Main admin user does not exist. Creating...</div>";
+                
+                // Create main admin user
+                $main_admin_data = array(
+                    'full_name' => 'Admin Ascanlindon',
+                    'email' => 'ascanlindon@gmail.com',
+                    'phone_number' => '+1234567890',
+                    'password' => 'admin123', // RAW password, not hashed
+                    'created_at' => date('Y-m-d H:i:s')
+                );
+                
+                if ($this->call->database->table('buyers')->insert($main_admin_data)) {
+                    echo "<div class='success'>✓ Main admin user created (ascanlindon@gmail.com / admin123)</div>";
+                } else {
+                    echo "<div class='error'>✗ Failed to create main admin user</div>";
+                }
+            } else {
+                echo "<div class='success'>✓ Main admin user exists</div>";
+            }
+            
             $stmt = $this->call->database->raw("SELECT * FROM buyers WHERE email = 'admin@craftify.com'");
             $admin_check = $stmt->fetchAll();
             

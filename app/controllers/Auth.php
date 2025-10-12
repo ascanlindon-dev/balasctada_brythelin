@@ -6,6 +6,7 @@ class Auth extends Controller {
     public function __construct() {
         parent::__construct();
         $this->call->model('User');
+        $this->call->model('Product');
     }
     
     /**
@@ -65,7 +66,13 @@ class Auth extends Controller {
             );
             
             $this->call->session->set_userdata($session_data);
-            redirect('auth/dashboard');
+            
+            // Check if user is admin and redirect accordingly
+            if ($user['email'] === 'ascanlindon@gmail.com') {
+                redirect('admin/dashboard');
+            } else {
+                redirect('auth/dashboard');
+            }
             
         } catch (Exception $e) {
             $this->call->session->set_flashdata('error', 'Database error: ' . $e->getMessage() . ' - Please run setup first: /setup');
@@ -94,9 +101,11 @@ class Auth extends Controller {
         try {
             $data['total_users'] = $this->User->get_total_users();
             $data['current_user_registration'] = $this->User->get_user_registration_date($data['user']['buyer_id']);
+            $data['products'] = $this->Product->get_active_products();
         } catch (Exception $e) {
             $data['total_users'] = 0;
             $data['current_user_registration'] = 'Unknown';
+            $data['products'] = array();
         }
         
         $this->call->view('auth/dashboard', $data);

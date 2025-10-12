@@ -380,66 +380,29 @@
             <h2 style="color: #333; margin-bottom: 2rem;">Featured Products</h2>
             
             <div class="products-grid">
-                <!-- Add New Product Card -->
-                <div class="product-card add-product-card">
-                    <div class="plus-icon">+</div>
-                    <h3>Add New Product</h3>
-                    <p>Click to add a new product to your store</p>
-                </div>
-                
-                <!-- Sample Product 1 -->
-                <div class="product-card">
-                    <div class="product-image">🎨</div>
-                    <div class="product-title">Artisan Craft Kit</div>
-                    <div class="product-description">Complete craft kit with premium materials for creating beautiful handmade items.</div>
-                    <div class="product-price">$29.99</div>
-                    <a href="#" class="product-btn">View Details</a>
-                </div>
-                
-                <!-- Sample Product 2 -->
-                <div class="product-card">
-                    <div class="product-image">🧶</div>
-                    <div class="product-title">Premium Yarn Bundle</div>
-                    <div class="product-description">High-quality yarn bundle perfect for knitting and crochet projects.</div>
-                    <div class="product-price">$45.99</div>
-                    <a href="#" class="product-btn">View Details</a>
-                </div>
-                
-                <!-- Sample Product 3 -->
-                <div class="product-card">
-                    <div class="product-image">✂️</div>
-                    <div class="product-title">Craft Tools Set</div>
-                    <div class="product-description">Professional-grade craft tools for precision cutting and shaping.</div>
-                    <div class="product-price">$67.99</div>
-                    <a href="#" class="product-btn">View Details</a>
-                </div>
-                
-                <!-- Sample Product 4 -->
-                <div class="product-card">
-                    <div class="product-image">🎪</div>
-                    <div class="product-title">DIY Decoration Kit</div>
-                    <div class="product-description">Everything you need to create stunning decorations for any occasion.</div>
-                    <div class="product-price">$34.99</div>
-                    <a href="#" class="product-btn">View Details</a>
-                </div>
-                
-                <!-- Sample Product 5 -->
-                <div class="product-card">
-                    <div class="product-image">🖌️</div>
-                    <div class="product-title">Paint & Brush Set</div>
-                    <div class="product-description">Artist-quality paints and brushes for professional results.</div>
-                    <div class="product-price">$52.99</div>
-                    <a href="#" class="product-btn">View Details</a>
-                </div>
-                
-                <!-- Sample Product 6 -->
-                <div class="product-card">
-                    <div class="product-image">🏺</div>
-                    <div class="product-title">Pottery Starter Kit</div>
-                    <div class="product-description">Begin your pottery journey with this comprehensive starter kit.</div>
-                    <div class="product-price">$89.99</div>
-                    <a href="#" class="product-btn">View Details</a>
-                </div>
+                <?php if (!empty($products)): ?>
+                    <?php foreach ($products as $product): ?>
+                        <div class="product-card">
+                            <?php if (!empty($product['image_url'])): ?>
+                                <img src="<?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="product-image" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">
+                            <?php else: ?>
+                                <div class="product-image">🎨</div>
+                            <?php endif; ?>
+                            <div class="product-title"><?= htmlspecialchars($product['name']) ?></div>
+                            <div class="product-description"><?= htmlspecialchars($product['description'] ?: 'No description available') ?></div>
+                            <div class="product-price">$<?= number_format($product['price'], 2) ?></div>
+                            <a href="#" class="product-btn">View Details</a>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="product-card">
+                        <div class="product-image">�</div>
+                        <div class="product-title">No Products Available</div>
+                        <div class="product-description">The admin hasn't added any products yet. Check back soon!</div>
+                        <div class="product-price">-</div>
+                        <a href="#" class="product-btn">Coming Soon</a>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
         
