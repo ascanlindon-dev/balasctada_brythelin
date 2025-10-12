@@ -22,7 +22,8 @@ class Setup_web extends Controller {
             
             // Check if buyers table exists
             echo "<h2>2. Checking buyers table...</h2>";
-            $query = $this->call->database->raw("SHOW TABLES LIKE 'buyers'");
+            $stmt = $this->call->database->raw("SHOW TABLES LIKE 'buyers'");
+            $query = $stmt->fetchAll();
             $table_exists = count($query) > 0;
             
             if (!$table_exists) {
@@ -50,7 +51,8 @@ class Setup_web extends Controller {
             
             // Check for test users
             echo "<h2>3. Checking test users...</h2>";
-            $admin_check = $this->call->database->raw("SELECT * FROM buyers WHERE email = 'admin@craftify.com'");
+            $stmt = $this->call->database->raw("SELECT * FROM buyers WHERE email = 'admin@craftify.com'");
+            $admin_check = $stmt->fetchAll();
             
             if (count($admin_check) == 0) {
                 echo "<div class='error'>✗ Admin user does not exist. Creating...</div>";
@@ -60,7 +62,7 @@ class Setup_web extends Controller {
                     'full_name' => 'Admin User',
                     'email' => 'admin@craftify.com',
                     'phone_number' => '+1234567890',
-                    'password' => password_hash('admin123', PASSWORD_DEFAULT),
+                    'password' => 'admin123', // RAW password, not hashed
                     'created_at' => date('Y-m-d H:i:s')
                 );
                 
@@ -74,7 +76,8 @@ class Setup_web extends Controller {
             }
             
             // Check for regular user
-            $user_check = $this->call->database->raw("SELECT * FROM buyers WHERE email = 'user@craftify.com'");
+            $stmt = $this->call->database->raw("SELECT * FROM buyers WHERE email = 'user@craftify.com'");
+            $user_check = $stmt->fetchAll();
             
             if (count($user_check) == 0) {
                 echo "<div class='error'>✗ Test user does not exist. Creating...</div>";
@@ -84,7 +87,7 @@ class Setup_web extends Controller {
                     'full_name' => 'Test User',
                     'email' => 'user@craftify.com',
                     'phone_number' => '+0987654321',
-                    'password' => password_hash('user123', PASSWORD_DEFAULT),
+                    'password' => 'user123', // RAW password, not hashed
                     'created_at' => date('Y-m-d H:i:s')
                 );
                 
@@ -99,7 +102,8 @@ class Setup_web extends Controller {
             
             // List all users
             echo "<h2>4. Current Users in Database:</h2>";
-            $all_users = $this->call->database->raw("SELECT buyer_id, full_name, email, phone_number, created_at FROM buyers ORDER BY buyer_id");
+            $stmt = $this->call->database->raw("SELECT buyer_id, full_name, email, phone_number, created_at FROM buyers ORDER BY buyer_id");
+            $all_users = $stmt->fetchAll();
             
             if (count($all_users) > 0) {
                 echo "<table border='1' style='border-collapse:collapse; width:100%;'>";

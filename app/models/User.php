@@ -86,8 +86,7 @@ class User extends Model {
      */
     public function get_total_users() {
         try {
-            $result = $this->db->raw("SELECT COUNT(*) as total FROM buyers");
-            return $result[0]['total'];
+            return $this->db->table('buyers')->count();
         } catch (Exception $e) {
             throw new Exception("Database error in get_total_users: " . $e->getMessage());
         }
