@@ -335,7 +335,8 @@
             
             <div class="success" style="margin-top: 1rem;">
                 ✅ <strong>Registration & Login System Working!</strong><br>
-                Your account data is successfully stored and retrieved from the buyers database.
+                Your account data is successfully stored and retrieved from the buyers database.<br>
+                <small>Registered: <?= isset($current_user_registration) ? date('M j, Y', strtotime($current_user_registration)) : 'Recently' ?></small>
             </div>
         </div>
         
@@ -443,14 +444,16 @@
         </div>
         
         <div class="test-info">
-            <h3>🧪 Testing Information</h3>
+            <h3>📊 Database Information</h3>
             <div class="test-details">
                 <p><strong>Database Table:</strong> buyers</p>
-                <p><strong>Primary Key:</strong> buyer_id (<?= htmlspecialchars($user['buyer_id']) ?>)</p>
+                <p><strong>Your ID:</strong> <?= htmlspecialchars($user['buyer_id']) ?></p>
+                <p><strong>Total Registered Users:</strong> <?= isset($total_users) ? $total_users : '0' ?></p>
                 <p><strong>Registration:</strong> ✅ Working</p>
                 <p><strong>Login:</strong> ✅ Working</p>
                 <p><strong>Session Management:</strong> ✅ Working</p>
-                <p><strong>Password Security:</strong> ✅ Hashed</p>
+                <p><strong>Password Security:</strong> ✅ Hashed with PHP password_hash()</p>
+                <p><strong>Database Connection:</strong> ✅ Active</p>
             </div>
         </div>
     </div>

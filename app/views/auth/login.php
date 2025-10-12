@@ -207,12 +207,6 @@
                 
                 <button type="submit" class="btn">Sign In</button>
             </form>
-            
-            <div class="test-accounts">
-                <strong>Test Accounts:</strong><br>
-                Admin: admin@craftify.com / admin123<br>
-                User: user@craftify.com / user123
-            </div>
         </div>
         
         <!-- Register Form -->

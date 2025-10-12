@@ -88,6 +88,15 @@ class Auth extends Controller {
             'phone_number' => $this->call->session->userdata('phone_number')
         );
         
+        // Get real statistics from database
+        try {
+            $data['total_users'] = $this->User->get_total_users();
+            $data['current_user_registration'] = $this->User->get_user_registration_date($data['user']['buyer_id']);
+        } catch (Exception $e) {
+            $data['total_users'] = 0;
+            $data['current_user_registration'] = 'Unknown';
+        }
+        
         $this->call->view('auth/dashboard', $data);
     }
     
@@ -150,26 +159,32 @@ class Auth extends Controller {
         }
         
         // Check if email already exists
-        if ($this->User->email_exists($email)) {
-            $this->call->session->set_flashdata('error', 'Email already exists');
-            redirect('auth/login');
-            return;
-        }
-        
-        // Hash password and create user in buyers table
-        $user_data = array(
-            'full_name' => $full_name,
-            'email' => $email,
-            'phone_number' => $phone_number,
-            'password' => password_hash($password, PASSWORD_DEFAULT),
-            'created_at' => date('Y-m-d H:i:s')
-        );
-        
-        if ($this->User->create_user($user_data)) {
-            $this->call->session->set_flashdata('success', 'Registration successful! Please login with your new account.');
-            redirect('auth/login');
-        } else {
-            $this->call->session->set_flashdata('error', 'Registration failed. Please try again.');
+        try {
+            if ($this->User->email_exists($email)) {
+                $this->call->session->set_flashdata('error', 'Email already exists. Please use a different email or try logging in.');
+                redirect('auth/login');
+                return;
+            }
+            
+            // Hash password and create user in buyers table
+            $user_data = array(
+                'full_name' => trim($full_name),
+                'email' => trim(strtolower($email)),
+                'phone_number' => trim($phone_number),
+                'password' => password_hash($password, PASSWORD_DEFAULT),
+                'created_at' => date('Y-m-d H:i:s')
+            );
+            
+            if ($this->User->create_user($user_data)) {
+                $this->call->session->set_flashdata('success', 'Registration successful! You can now login with your credentials.');
+                redirect('auth/login');
+            } else {
+                $this->call->session->set_flashdata('error', 'Registration failed. Please try again.');
+                redirect('auth/login');
+            }
+            
+        } catch (Exception $e) {
+            $this->call->session->set_flashdata('error', 'Database error during registration: ' . $e->getMessage() . ' - Please ensure database is set up properly.');
             redirect('auth/login');
         }
     }
