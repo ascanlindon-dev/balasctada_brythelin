@@ -132,5 +132,77 @@ class Order extends Model {
             throw new Exception("Database error in clear_cart: " . $e->getMessage());
         }
     }
+    
+    /**
+     * Get buying statistics for a buyer
+     */
+    public function get_buying_stats($buyer_id) {
+        if (empty($buyer_id)) return array();
+        
+        try {
+            $stats = array();
+            
+            // Total orders count
+            $query = "SELECT COUNT(*) as total_orders FROM orders WHERE buyer_id = ?";
+            $stmt = $this->db->raw($query, array($buyer_id));
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $stats['total_orders'] = $result ? (int)$result['total_orders'] : 0;
+            
+            // Total amount spent
+            $query = "SELECT SUM(total_amount) as total_spent FROM orders WHERE buyer_id = ?";
+            $stmt = $this->db->raw($query, array($buyer_id));
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $stats['total_spent'] = $result ? (float)$result['total_spent'] : 0;
+            
+            // Average order value
+            $stats['average_order'] = $stats['total_orders'] > 0 ? ($stats['total_spent'] / $stats['total_orders']) : 0;
+            
+            // Cart items count
+            $query = "SELECT COUNT(*) as cart_count FROM cart WHERE buyer_id = ?";
+            $stmt = $this->db->raw($query, array($buyer_id));
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $stats['cart_items'] = $result ? (int)$result['cart_count'] : 0;
+            
+            // Orders by status
+            $query = "SELECT status, COUNT(*) as count FROM orders WHERE buyer_id = ? GROUP BY status";
+            $stmt = $this->db->raw($query, array($buyer_id));
+            $status_results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stats['orders_by_status'] = array();
+            foreach ($status_results as $row) {
+                $stats['orders_by_status'][$row['status']] = (int)$row['count'];
+            }
+            
+            return $stats;
+        } catch (Exception $e) {
+            return array(
+                'total_orders' => 0,
+                'total_spent' => 0,
+                'average_order' => 0,
+                'cart_items' => 0,
+                'orders_by_status' => array()
+            );
+        }
+    }
+    
+    /**
+     * Get recent orders with product details
+     */
+    public function get_recent_orders_with_details($buyer_id, $limit = 5) {
+        if (empty($buyer_id)) return array();
+        
+        try {
+            $query = "SELECT o.*, 
+                            (SELECT COUNT(*) FROM cart WHERE buyer_id = o.buyer_id) as items_count
+                     FROM orders o
+                     WHERE o.buyer_id = ?
+                     ORDER BY o.created_at DESC
+                     LIMIT ?";
+            
+            $stmt = $this->db->raw($query, array($buyer_id, $limit));
+            return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: array();
+        } catch (Exception $e) {
+            return array();
+        }
+    }
 }
 ?>

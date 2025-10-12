@@ -106,6 +106,8 @@ class Auth extends Controller {
             $data['orders'] = $this->Order->get_orders_by_buyer($data['user']['buyer_id']);
             $data['cart_items'] = $this->Order->get_cart_items($data['user']['buyer_id']);
             $data['cart_total'] = $this->Order->get_cart_total($data['user']['buyer_id']);
+            $data['buying_stats'] = $this->Order->get_buying_stats($data['user']['buyer_id']);
+            $data['recent_orders'] = $this->Order->get_recent_orders_with_details($data['user']['buyer_id'], 3);
         } catch (Exception $e) {
             $data['total_users'] = 0;
             $data['current_user_registration'] = 'Unknown';
@@ -113,6 +115,14 @@ class Auth extends Controller {
             $data['orders'] = array();
             $data['cart_items'] = array();
             $data['cart_total'] = 0;
+            $data['buying_stats'] = array(
+                'total_orders' => 0,
+                'total_spent' => 0,
+                'average_order' => 0,
+                'cart_items' => 0,
+                'orders_by_status' => array()
+            );
+            $data['recent_orders'] = array();
         }
         
         $this->call->view('auth/dashboard', $data);
