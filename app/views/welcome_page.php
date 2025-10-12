@@ -109,6 +109,52 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
             margin-top: 0;
             color: #0f172a;
         }
+
+        .auth-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+            text-align: center;
+            color: white;
+        }
+
+        .auth-section h2 {
+            color: white;
+            margin-top: 0;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .auth-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+            font-weight: 500;
+        }
+
+        .auth-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        .auth-btn.primary {
+            background: white;
+            color: #667eea;
+        }
+
+        .auth-btn.primary:hover {
+            background: #f8f9fa;
+            color: #667eea;
+        }
     </style>
 </head>
 <body>
@@ -119,6 +165,18 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
         </div>
 
         <div class="main">
+            <div class="auth-section">
+                <h2>🔐 Authentication System</h2>
+                <p>Try out the built-in login system with secure user authentication!</p>
+                <div class="auth-buttons">
+                    <a href="<?= isset($login_url) ? $login_url : base_url('auth/login') ?>" class="auth-btn primary">Login</a>
+                    <a href="<?= isset($register_url) ? $register_url : base_url('auth/register') ?>" class="auth-btn">Register</a>
+                </div>
+                <p style="margin-top: 1rem; font-size: 0.9rem;">
+                    Test accounts: admin@craftify.com / admin123 or user@craftify.com / user123
+                </p>
+            </div>
+
             <h2>What is LavaLust?</h2>
             <p><strong>LavaLust</strong> is a lightweight PHP framework that follows the <strong>MVC (Model–View–Controller)</strong> pattern. It's designed for developers who want a structured yet modular PHP development experience.</p>
 
