@@ -132,6 +132,7 @@
             padding: 2rem;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
         }
         
         .quick-actions h2 {
@@ -174,6 +175,104 @@
             color: #333;
         }
         
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .product-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-description {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+        
+        .product-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 100%;
+            text-align: center;
+            display: inline-block;
+        }
+        
+        .product-btn:hover {
+            transform: translateY(-2px);
+            color: white;
+        }
+        
+        .add-product-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .add-product-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .add-product-card .plus-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .add-product-card h3 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+        
         .success {
             background: #d4edda;
             color: #155724;
@@ -214,7 +313,7 @@
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <div class="nav-brand">CRAFTIFY Dashboard</div>
+            <div class="nav-brand">CRAFTIFY Products</div>
             <div class="nav-user">
                 <span>Welcome, <?= htmlspecialchars($user['full_name']) ?>!</span>
                 <a href="<?= site_url('auth/logout') ?>" class="logout-btn">Logout</a>
@@ -224,8 +323,8 @@
     
     <div class="container">
         <div class="welcome-card">
-            <h1>Welcome to Your CRAFTIFY Dashboard</h1>
-            <p>You have successfully logged into the CRAFTIFY system. This dashboard confirms that the registration and login system is working correctly with your buyers database.</p>
+            <h1>Welcome to Your Product Dashboard</h1>
+            <p>Manage your products, view sales analytics, and track your inventory all in one place. This dashboard confirms that the registration and login system is working correctly with your buyers database.</p>
             
             <div class="user-info">
                 <strong>Buyer ID:</strong> <?= htmlspecialchars($user['buyer_id']) ?><br>
@@ -267,12 +366,79 @@
         </div>
         
         <div class="quick-actions">
-            <h2>Quick Actions</h2>
+            <h2>Product Management</h2>
             <div class="action-buttons">
-                <a href="#" class="action-btn">Browse Products</a>
-                <a href="#" class="action-btn">My Orders</a>
-                <a href="#" class="action-btn">Account Settings</a>
-                <a href="<?= site_url('auth/logout') ?>" class="action-btn" style="background: #dc3545;">Logout</a>
+                <a href="#" class="action-btn">Add New Product</a>
+                <a href="#" class="action-btn">Manage Inventory</a>
+                <a href="#" class="action-btn">View Orders</a>
+                <a href="#" class="action-btn">Analytics Dashboard</a>
+            </div>
+        </div>
+        
+        <div style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); margin-bottom: 2rem;">
+            <h2 style="color: #333; margin-bottom: 2rem;">Featured Products</h2>
+            
+            <div class="products-grid">
+                <!-- Add New Product Card -->
+                <div class="product-card add-product-card">
+                    <div class="plus-icon">+</div>
+                    <h3>Add New Product</h3>
+                    <p>Click to add a new product to your store</p>
+                </div>
+                
+                <!-- Sample Product 1 -->
+                <div class="product-card">
+                    <div class="product-image">🎨</div>
+                    <div class="product-title">Artisan Craft Kit</div>
+                    <div class="product-description">Complete craft kit with premium materials for creating beautiful handmade items.</div>
+                    <div class="product-price">$29.99</div>
+                    <a href="#" class="product-btn">View Details</a>
+                </div>
+                
+                <!-- Sample Product 2 -->
+                <div class="product-card">
+                    <div class="product-image">🧶</div>
+                    <div class="product-title">Premium Yarn Bundle</div>
+                    <div class="product-description">High-quality yarn bundle perfect for knitting and crochet projects.</div>
+                    <div class="product-price">$45.99</div>
+                    <a href="#" class="product-btn">View Details</a>
+                </div>
+                
+                <!-- Sample Product 3 -->
+                <div class="product-card">
+                    <div class="product-image">✂️</div>
+                    <div class="product-title">Craft Tools Set</div>
+                    <div class="product-description">Professional-grade craft tools for precision cutting and shaping.</div>
+                    <div class="product-price">$67.99</div>
+                    <a href="#" class="product-btn">View Details</a>
+                </div>
+                
+                <!-- Sample Product 4 -->
+                <div class="product-card">
+                    <div class="product-image">🎪</div>
+                    <div class="product-title">DIY Decoration Kit</div>
+                    <div class="product-description">Everything you need to create stunning decorations for any occasion.</div>
+                    <div class="product-price">$34.99</div>
+                    <a href="#" class="product-btn">View Details</a>
+                </div>
+                
+                <!-- Sample Product 5 -->
+                <div class="product-card">
+                    <div class="product-image">🖌️</div>
+                    <div class="product-title">Paint & Brush Set</div>
+                    <div class="product-description">Artist-quality paints and brushes for professional results.</div>
+                    <div class="product-price">$52.99</div>
+                    <a href="#" class="product-btn">View Details</a>
+                </div>
+                
+                <!-- Sample Product 6 -->
+                <div class="product-card">
+                    <div class="product-image">🏺</div>
+                    <div class="product-title">Pottery Starter Kit</div>
+                    <div class="product-description">Begin your pottery journey with this comprehensive starter kit.</div>
+                    <div class="product-price">$89.99</div>
+                    <a href="#" class="product-btn">View Details</a>
+                </div>
             </div>
         </div>
         
