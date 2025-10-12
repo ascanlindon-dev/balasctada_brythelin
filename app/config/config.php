@@ -79,7 +79,11 @@ $config['ENVIRONMENT']             = 'development';
 | WARNING: You MUST set this value!
 |
 */
-$config['base_url'] 				= 'http://localhost/CRAFTIFY%20Project/LavaLust/';
+// Dynamic base URL - works for both localhost and Render
+$http_protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
+$domain = $_SERVER['HTTP_HOST'];
+
+$config['base_url'] = $http_protocol . $domain . '/';
 
 /*
 |--------------------------------------------------------------------------
