@@ -5,8 +5,6 @@ class Auth extends Controller {
     
     public function __construct() {
         parent::__construct();
-        $this->call->library('session');
-        $this->call->library('io');
         $this->call->model('User');
     }
     
@@ -105,11 +103,11 @@ class Auth extends Controller {
      * Process registration form
      */
     public function do_register() {
-        $full_name = $this->io->post('full_name');
-        $email = $this->io->post('email');
-        $phone_number = $this->io->post('phone_number');
-        $password = $this->io->post('password');
-        $confirm_password = $this->io->post('confirm_password');
+        $full_name = $this->call->io->post('full_name');
+        $email = $this->call->io->post('email');
+        $phone_number = $this->call->io->post('phone_number');
+        $password = $this->call->io->post('password');
+        $confirm_password = $this->call->io->post('confirm_password');
         
         // Basic validation
         if (empty($full_name) || empty($email) || empty($phone_number) || empty($password) || empty($confirm_password)) {

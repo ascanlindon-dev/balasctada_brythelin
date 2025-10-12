@@ -286,10 +286,14 @@ class Invoker {
 					$database = load_class('database', 'database');
 					$LAVA->db = $database::instance(NULL);
 				}
-				$LAVA->properties[$class] = load_class($class, 'libraries');
+				$library_instance = load_class($class, 'libraries');
+				$LAVA->properties[$class] = $library_instance;
+				$this->properties[$class] = $library_instance;
 			}
 		} else {
-			$LAVA->properties[$classes] = load_class($classes, 'libraries', $params);
+			$library_instance = load_class($classes, 'libraries', $params);
+			$LAVA->properties[$classes] = $library_instance;
+			$this->properties[$classes] = $library_instance;
 		}
 	}
 
@@ -341,5 +345,8 @@ class Invoker {
         {
             lava_instance()->config->load($autoload['configs']);
         }
+        
+        // Also load kernel classes that should be available
+        $this->properties['io'] = load_class('io', 'kernel');
     }
 }
