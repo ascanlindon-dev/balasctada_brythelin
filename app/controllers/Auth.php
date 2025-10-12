@@ -38,17 +38,21 @@ class Auth extends Controller {
         
         // Debug: Check if user exists in database
         try {
+            // Normalize email to lowercase for consistent lookup
+            $email = trim(strtolower($email));
             $user = $this->User->get_user_by_email($email);
             
             if (!$user) {
-                $this->call->session->set_flashdata('error', 'Email not found in database. Please register first or use: admin@craftify.com / admin123');
+                $this->call->session->set_flashdata('error', 'Email not found in database. Please register first.');
                 redirect('auth/login');
                 return;
             }
             
             // Debug: Check password verification
             if (!password_verify($password, $user['password'])) {
-                $this->call->session->set_flashdata('error', 'Password is incorrect. For testing use: admin@craftify.com / admin123');
+                // Add some debugging info
+                $debug_info = "Password verification failed for email: " . $email;
+                $this->call->session->set_flashdata('error', 'Password is incorrect. Please check your password and try again.');
                 redirect('auth/login');
                 return;
             }
@@ -186,6 +190,52 @@ class Auth extends Controller {
         } catch (Exception $e) {
             $this->call->session->set_flashdata('error', 'Database error during registration: ' . $e->getMessage() . ' - Please ensure database is set up properly.');
             redirect('auth/login');
+        }
+    }
+    
+    /**
+     * Debug method to test password verification
+     */
+    public function debug_password($email = null, $password = null) {
+        if (!$email || !$password) {
+            echo "Usage: /auth/debug_password/your_email/your_password<br>";
+            echo "Example: /auth/debug_password/test@example.com/testpassword<br>";
+            return;
+        }
+        
+        try {
+            $email = trim(strtolower(urldecode($email)));
+            $password = urldecode($password);
+            
+            echo "<h3>Password Debug Information</h3>";
+            echo "Looking for email: " . htmlspecialchars($email) . "<br>";
+            echo "Testing password: " . htmlspecialchars($password) . "<br><br>";
+            
+            $user = $this->User->get_user_by_email($email);
+            
+            if ($user) {
+                echo "✓ User found in database<br>";
+                echo "User ID: " . $user['buyer_id'] . "<br>";
+                echo "Full Name: " . htmlspecialchars($user['full_name']) . "<br>";
+                echo "Email: " . htmlspecialchars($user['email']) . "<br>";
+                echo "Created: " . $user['created_at'] . "<br>";
+                echo "Stored hash: " . htmlspecialchars(substr($user['password'], 0, 30)) . "...<br><br>";
+                
+                if (password_verify($password, $user['password'])) {
+                    echo "✓ Password verification SUCCESSFUL<br>";
+                    echo "<span style='color: green;'>Login should work!</span>";
+                } else {
+                    echo "✗ Password verification FAILED<br>";
+                    echo "<span style='color: red;'>This is the issue!</span><br>";
+                    echo "Make sure you're using the exact password you registered with.";
+                }
+            } else {
+                echo "✗ User NOT found in database<br>";
+                echo "<span style='color: red;'>Email does not exist</span>";
+            }
+            
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
         }
     }
 }

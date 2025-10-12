@@ -56,3 +56,4 @@ $router->post('/auth/do_login', 'Auth::do_login');
 $router->post('/auth/do_register', 'Auth::do_register');
 $router->get('/auth/dashboard', 'Auth::dashboard');
 $router->get('/auth/logout', 'Auth::logout');
+$router->get('/auth/debug_password/(:any)/(:any)', 'Auth::debug_password/$1/$2');
