@@ -21,7 +21,7 @@ class Setup extends Controller {
         
         try {
             // Run migration
-            echo "1. Creating users table...\n";
+            echo "1. Creating buyers table...\n";
             $this->call->library('migration');
             $this->migration->version(1);
             
@@ -36,8 +36,8 @@ class Setup extends Controller {
             echo "=====================================\n\n";
             
             echo "You can now access the login system at:\n";
-            echo "- Login: " . base_url('auth/login') . "\n";
-            echo "- Register: " . base_url('auth/register') . "\n\n";
+            echo "- Login: " . site_url('auth/login') . "\n";
+            echo "- Register: " . site_url('auth/register') . "\n\n";
             
             echo "Default users created:\n";
             echo "- Admin: admin@craftify.com / admin123\n";
@@ -57,11 +57,11 @@ class Setup extends Controller {
         
         try {
             // Drop and recreate table
-            echo "1. Dropping users table...\n";
+            echo "1. Dropping buyers table...\n";
             $this->call->library('migration');
             $this->migration->version(0);
             
-            echo "2. Recreating users table...\n";
+            echo "2. Recreating buyers table...\n";
             $this->migration->version(1);
             
             echo "3. Recreating default users...\n";

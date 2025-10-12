@@ -181,7 +181,7 @@
             <div class="nav-brand">CRAFTIFY Dashboard</div>
             <div class="nav-user">
                 <span>Welcome, <?= htmlspecialchars($user['full_name']) ?>!</span>
-                <a href="<?= base_url('auth/logout') ?>" class="logout-btn">Logout</a>
+                <a href="<?= site_url('auth/logout') ?>" class="logout-btn">Logout</a>
             </div>
         </div>
     </nav>

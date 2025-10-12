@@ -11,18 +11,19 @@ class UserSeeder {
     
     public function run() {
         // Check if admin user already exists
-        $existing_admin = $this->db->table('users')->where('email', 'admin@craftify.com')->get();
+        $existing_admin = $this->db->table('buyers')->where('email', 'admin@craftify.com')->get();
         
         if (!$existing_admin) {
             // Create default admin user
             $admin_data = array(
-                'name' => 'Admin User',
+                'full_name' => 'Admin User',
                 'email' => 'admin@craftify.com',
+                'phone_number' => '+1234567890',
                 'password' => password_hash('admin123', PASSWORD_DEFAULT),
                 'created_at' => date('Y-m-d H:i:s')
             );
             
-            $this->db->table('users')->insert($admin_data);
+            $this->db->table('buyers')->insert($admin_data);
             echo "Default admin user created successfully.\n";
             echo "Email: admin@craftify.com\n";
             echo "Password: admin123\n";
@@ -31,17 +32,18 @@ class UserSeeder {
         }
         
         // Create sample user
-        $existing_user = $this->db->table('users')->where('email', 'user@craftify.com')->get();
+        $existing_user = $this->db->table('buyers')->where('email', 'user@craftify.com')->get();
         
         if (!$existing_user) {
             $user_data = array(
-                'name' => 'Sample User',
+                'full_name' => 'Sample User',
                 'email' => 'user@craftify.com',
+                'phone_number' => '+0987654321',
                 'password' => password_hash('user123', PASSWORD_DEFAULT),
                 'created_at' => date('Y-m-d H:i:s')
             );
             
-            $this->db->table('users')->insert($user_data);
+            $this->db->table('buyers')->insert($user_data);
             echo "Sample user created successfully.\n";
             echo "Email: user@craftify.com\n";
             echo "Password: user123\n";

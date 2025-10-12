@@ -169,8 +169,8 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
                 <h2>🔐 Authentication System</h2>
                 <p>Try out the built-in login system with secure user authentication!</p>
                 <div class="auth-buttons">
-                    <a href="<?= isset($login_url) ? $login_url : base_url('auth/login') ?>" class="auth-btn primary">Login</a>
-                    <a href="<?= isset($register_url) ? $register_url : base_url('auth/register') ?>" class="auth-btn">Register</a>
+                    <a href="<?= isset($login_url) ? $login_url : site_url('auth/login') ?>" class="auth-btn primary">Login</a>
+                    <a href="<?= isset($register_url) ? $register_url : site_url('auth/register') ?>" class="auth-btn">Register</a>
                 </div>
                 <p style="margin-top: 1rem; font-size: 0.9rem;">
                     Test accounts: admin@craftify.com / admin123 or user@craftify.com / user123

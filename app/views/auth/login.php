@@ -135,7 +135,7 @@
             <div class="success"><?= $success ?></div>
         <?php endif; ?>
         
-        <form action="<?= base_url('auth/do_login') ?>" method="POST">
+        <form action="<?= site_url('auth/do_login') ?>" method="POST">
             <div class="form-group">
                 <label for="email">Email Address</label>
                 <input type="email" id="email" name="email" required>
@@ -150,7 +150,7 @@
         </form>
         
         <div class="register-link">
-            <p>Don't have an account? <a href="<?= base_url('auth/register') ?>">Create one here</a></p>
+            <p>Don't have an account? <a href="<?= site_url('auth/register') ?>">Create one here</a></p>
         </div>
     </div>
 </body>
