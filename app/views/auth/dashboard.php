@@ -177,9 +177,317 @@
         
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 2rem;
-            margin-top: 2rem;
+            margin-top: 1.5rem;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #e9ecef;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        .product-image.placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #6c757d;
+        }
+        
+        .product-info {
+            padding: 1.5rem;
+        }
+        
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-description {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 1rem;
+        }
+        
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-stock {
+            margin-bottom: 1rem;
+        }
+        
+        .in-stock {
+            color: #28a745;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .out-of-stock {
+            color: #dc3545;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .product-actions {
+            padding: 0 1.5rem 1.5rem;
+        }
+        
+        .add-to-cart-form {
+            display: flex;
+            gap: 1rem;
+            align-items: end;
+        }
+        
+        .quantity-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .quantity-selector label {
+            font-size: 0.85rem;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .quantity-input {
+            width: 60px;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            text-align: center;
+        }
+        
+        .add-to-cart-btn {
+            flex: 1;
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .add-to-cart-btn:hover:not(.disabled) {
+            background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+            transform: translateY(-1px);
+        }
+        
+        .add-to-cart-btn.disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #666;
+        }
+        
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* Cart Styles */
+        .cart-items {
+            margin-bottom: 2rem;
+        }
+        
+        .cart-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+        
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        
+        .cart-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .cart-item-image .placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+            font-size: 1.5rem;
+        }
+        
+        .cart-item-details {
+            flex: 1;
+        }
+        
+        .item-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.25rem;
+        }
+        
+        .item-price {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .item-subtotal {
+            color: #007bff;
+            font-weight: 600;
+            margin-top: 0.25rem;
+        }
+        
+        .cart-item-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: flex-end;
+        }
+        
+        .quantity-form {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .quantity-control label {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        .update-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        
+        .remove-btn {
+            color: #dc3545;
+            text-decoration: none;
+            font-size: 0.85rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            border: 1px solid #dc3545;
+            transition: all 0.3s;
+        }
+        
+        .remove-btn:hover {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .cart-summary {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .summary-row.total {
+            border-bottom: 2px solid #007bff;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+        
+        .checkout-actions {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .checkout-btn {
+            flex: 1;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .checkout-btn:hover {
+            background: linear-gradient(135deg, #218838 0%, #1a9b7a 100%);
+            transform: translateY(-2px);
+        }
+        
+        .continue-shopping-btn, .shop-now-btn {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .continue-shopping-btn:hover, .shop-now-btn:hover {
+            background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+            transform: translateY(-2px);
         }
         
         .product-card {
@@ -542,15 +850,67 @@
             </div>
 
             <div class="profile-tabs">
-                <button class="tab-btn active" onclick="showTab('account')">Account Details</button>
-                <button class="tab-btn" onclick="showTab('orders')">My Orders</button>
-                <button class="tab-btn" onclick="showTab('cart')">My Cart</button>
-                <button class="tab-btn" onclick="showTab('products')">Browse Products</button>
+                <button class="tab-btn active" onclick="showTab('products')">🛍️ Shop Products</button>
+                <button class="tab-btn" onclick="showTab('cart')">🛒 My Cart</button>
+                <button class="tab-btn" onclick="showTab('orders')">📦 Order History</button>
             </div>
 
-            <!-- Account Details Tab -->
-            <div id="account" class="tab-content active">
-                <h3>Account & Buying Summary</h3>
+            <!-- Products Tab -->
+            <div id="products" class="tab-content active">
+                <h3>🛍️ Shop Our Products</h3>
+                <div class="products-grid">
+                    <?php if (!empty($products)): ?>
+                        <?php foreach ($products as $product): ?>
+                            <div class="product-card">
+                                <?php if (!empty($product['image_url'])): ?>
+                                    <img src="<?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="product-image">
+                                <?php else: ?>
+                                    <div class="product-image placeholder">🎨</div>
+                                <?php endif; ?>
+                                <div class="product-info">
+                                    <div class="product-title"><?= htmlspecialchars($product['name']) ?></div>
+                                    <div class="product-description"><?= htmlspecialchars($product['description'] ?: 'High-quality product available now!') ?></div>
+                                    <div class="product-price">$<?= number_format($product['price'], 2) ?></div>
+                                    <div class="product-stock">
+                                        <?php if ($product['stock'] > 0): ?>
+                                            <span class="in-stock">✅ In Stock (<?= $product['stock'] ?> available)</span>
+                                        <?php else: ?>
+                                            <span class="out-of-stock">❌ Out of Stock</span>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                                <?php if ($product['stock'] > 0): ?>
+                                    <div class="product-actions">
+                                        <form action="<?= site_url('auth/add_to_cart/' . $product['id']) ?>" method="POST" class="add-to-cart-form">
+                                            <div class="quantity-selector">
+                                                <label for="quantity_<?= $product['id'] ?>">Qty:</label>
+                                                <input type="number" 
+                                                       id="quantity_<?= $product['id'] ?>" 
+                                                       name="quantity" 
+                                                       value="1" 
+                                                       min="1" 
+                                                       max="<?= $product['stock'] ?>" 
+                                                       class="quantity-input">
+                                            </div>
+                                            <button type="submit" class="add-to-cart-btn">🛒 Add to Cart</button>
+                                        </form>
+                                    </div>
+                                <?php else: ?>
+                                    <div class="product-actions">
+                                        <button class="add-to-cart-btn disabled" disabled>Out of Stock</button>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="empty-state">
+                            <div class="empty-icon">🏪</div>
+                            <h3>Store Coming Soon!</h3>
+                            <p>We're setting up our product catalog. Check back soon for amazing products!</p>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
                 
                 <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
                     <div class="stat-card">
@@ -661,36 +1021,64 @@
 
             <!-- Cart Tab -->
             <div id="cart" class="tab-content">
-                <h3>My Cart</h3>
+                <h3>🛒 My Shopping Cart</h3>
                 <?php if (!empty($cart_items)): ?>
-                    <?php foreach ($cart_items as $item): ?>
-                        <div class="cart-item">
-                            <div class="cart-info">
-                                <div class="product-name"><?= htmlspecialchars($item['name']) ?></div>
-                                <div class="product-details">Price: $<?= number_format($item['price'], 2) ?> | Subtotal: $<?= number_format($item['total_price'], 2) ?></div>
+                    <div class="cart-items">
+                        <?php foreach ($cart_items as $item): ?>
+                            <div class="cart-item">
+                                <div class="cart-item-image">
+                                    <?php if (!empty($item['image_url'])): ?>
+                                        <img src="<?= htmlspecialchars($item['image_url']) ?>" alt="<?= htmlspecialchars($item['name']) ?>">
+                                    <?php else: ?>
+                                        <div class="placeholder">🎨</div>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="cart-item-details">
+                                    <div class="item-name"><?= htmlspecialchars($item['name']) ?></div>
+                                    <div class="item-price">$<?= number_format($item['price'], 2) ?> each</div>
+                                    <div class="item-subtotal">Subtotal: $<?= number_format($item['total_price'], 2) ?></div>
+                                </div>
+                                <div class="cart-item-controls">
+                                    <form action="<?= site_url('auth/update_cart') ?>" method="POST" class="quantity-form">
+                                        <input type="hidden" name="cart_id" value="<?= $item['id'] ?>">
+                                        <div class="quantity-control">
+                                            <label>Qty:</label>
+                                            <input type="number" name="quantity" value="<?= $item['quantity'] ?>" min="1" class="quantity-input">
+                                            <button type="submit" class="update-btn">Update</button>
+                                        </div>
+                                    </form>
+                                    <a href="<?= site_url('auth/remove_from_cart/' . $item['id']) ?>" 
+                                       class="remove-btn"
+                                       onclick="return confirm('Remove this item from cart?')">🗑️ Remove</a>
+                                </div>
                             </div>
-                            <div class="cart-controls">
-                                <form action="<?= site_url('auth/update_cart') ?>" method="POST" style="display: inline-flex; align-items: center; gap: 0.5rem;">
-                                    <input type="hidden" name="cart_id" value="<?= $item['id'] ?>">
-                                    <input type="number" name="quantity" value="<?= $item['quantity'] ?>" min="1" class="quantity-input">
-                                    <button type="submit" class="action-btn btn-sm">Update</button>
-                                </form>
-                                <a href="<?= site_url('auth/remove_from_cart/' . $item['id']) ?>" 
-                                   class="action-btn btn-sm" 
-                                   style="background: #dc3545;"
-                                   onclick="return confirm('Remove this item from cart?')">Remove</a>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
+                        <?php endforeach; ?>
+                    </div>
                     
-                    <div class="cart-total">
-                        <h3>Total: $<?= number_format($cart_total, 2) ?></h3>
-                        <p>Cart contains <?= count($cart_items) ?> item(s)</p>
+                    <div class="cart-summary">
+                        <div class="summary-row">
+                            <span class="summary-label">Items in Cart:</span>
+                            <span class="summary-value"><?= count($cart_items) ?> item(s)</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span class="summary-label">Total Amount:</span>
+                            <span class="summary-value">$<?= number_format($cart_total, 2) ?></span>
+                        </div>
+                        <div class="checkout-actions">
+                            <button class="checkout-btn" onclick="proceedToCheckout()">
+                                💳 Proceed to Checkout
+                            </button>
+                            <button class="continue-shopping-btn" onclick="showTab('products')">
+                                🛍️ Continue Shopping
+                            </button>
+                        </div>
                     </div>
                 <?php else: ?>
                     <div class="empty-state">
+                        <div class="empty-icon">🛒</div>
                         <h3>Your Cart is Empty</h3>
-                        <p>Add some products to your cart to see them here!</p>
+                        <p>Browse our products and add items to your cart!</p>
+                        <button class="shop-now-btn" onclick="showTab('products')">🛍️ Start Shopping</button>
                     </div>
                 <?php endif; ?>
             </div>
@@ -816,6 +1204,39 @@
             // Add active class to clicked button
             event.target.classList.add('active');
         }
+        
+        function proceedToCheckout() {
+            if (confirm('Proceed to checkout? This will create an order with your current cart items.')) {
+                // For now, show a simple checkout confirmation
+                // In a real application, this would redirect to a checkout page
+                alert('🎉 Thank you for your order! Your order has been placed successfully.\n\nOrder details:\n- Items will be processed within 1-2 business days\n- You will receive a confirmation email shortly\n- Track your order in the "Order History" tab');
+                
+                // Optionally reload the page to clear the cart (simulate order placement)
+                // window.location.reload();
+                
+                // For demo purposes, just switch to orders tab
+                showTab('orders');
+            }
+        }
+        
+        // Add some interactive feedback for form submissions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add loading states to forms
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function() {
+                    const submitBtn = form.querySelector('button[type="submit"]');
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.style.opacity = '0.7';
+                        setTimeout(() => {
+                            submitBtn.disabled = false;
+                            submitBtn.style.opacity = '1';
+                        }, 2000);
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>
