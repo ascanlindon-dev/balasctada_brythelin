@@ -11,7 +11,12 @@ class User extends Model {
      * Get user by email from buyers table
      */
     public function get_user_by_email($email) {
-        return $this->db->table('buyers')->where('email', $email)->get();
+        try {
+            $result = $this->db->table('buyers')->where('email', $email)->get();
+            return $result;
+        } catch (Exception $e) {
+            throw new Exception("Database error in get_user_by_email: " . $e->getMessage());
+        }
     }
     
     /**

@@ -45,6 +45,11 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 
 $router->get('/', 'Auth::login');
 
+// Setup routes
+$router->get('/setup', 'Setup_web::index');
+$router->get('/setup_web', 'Setup_web::index');
+$router->get('/setup_web/reset', 'Setup_web::reset');
+
 // Authentication routes
 $router->get('/auth/login', 'Auth::login');
 $router->post('/auth/do_login', 'Auth::do_login');

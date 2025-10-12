@@ -36,11 +36,24 @@ class Auth extends Controller {
             return;
         }
         
-        // Verify credentials
-        $user = $this->User->verify_login($email, $password);
-        
-        if ($user) {
-            // Set session data using buyers table structure
+        // Debug: Check if user exists in database
+        try {
+            $user = $this->User->get_user_by_email($email);
+            
+            if (!$user) {
+                $this->call->session->set_flashdata('error', 'Email not found in database. Please register first or use: admin@craftify.com / admin123');
+                redirect('auth/login');
+                return;
+            }
+            
+            // Debug: Check password verification
+            if (!password_verify($password, $user['password'])) {
+                $this->call->session->set_flashdata('error', 'Password is incorrect. For testing use: admin@craftify.com / admin123');
+                redirect('auth/login');
+                return;
+            }
+            
+            // If we reach here, login is successful
             $session_data = array(
                 'buyer_id' => $user['buyer_id'],
                 'email' => $user['email'],
@@ -51,8 +64,9 @@ class Auth extends Controller {
             
             $this->call->session->set_userdata($session_data);
             redirect('auth/dashboard');
-        } else {
-            $this->call->session->set_flashdata('error', 'Invalid email or password');
+            
+        } catch (Exception $e) {
+            $this->call->session->set_flashdata('error', 'Database error: ' . $e->getMessage() . ' - Please run setup first: /setup');
             redirect('auth/login');
         }
     }
