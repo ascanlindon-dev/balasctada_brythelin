@@ -76,14 +76,14 @@ class Admin extends Controller {
      * Process Add Product
      */
     public function do_add_product() {
-        $name = $this->call->io->post('name');
+    $product_name = $this->call->io->post('name');
         $description = $this->call->io->post('description');
         $price = $this->call->io->post('price');
         $image_url = $this->call->io->post('image_url');
         $stock = $this->call->io->post('stock');
         
         // Validation
-        if (empty($name) || empty($price)) {
+        if (empty($product_name) || empty($price)) {
             $this->call->session->set_flashdata('error', 'Name and price are required');
             redirect('admin/add_product');
             return;
@@ -97,12 +97,11 @@ class Admin extends Controller {
         
         try {
             $product_data = array(
-                'name' => trim($name),
+                'product_name' => trim($product_name),
                 'description' => trim($description),
                 'price' => floatval($price),
                 'stock' => intval($stock),
-                'image_url' => trim($image_url),
-                'created_by' => $this->call->session->userdata('email')
+                'image_url' => trim($image_url)
             );
             
             if ($this->Product->create_product($product_data)) {
@@ -151,14 +150,14 @@ class Admin extends Controller {
             redirect('admin/products');
         }
         
-        $name = $this->call->io->post('name');
+    $product_name = $this->call->io->post('name');
         $description = $this->call->io->post('description');
         $price = $this->call->io->post('price');
         $image_url = $this->call->io->post('image_url');
         $stock = $this->call->io->post('stock');
         
         // Validation
-        if (empty($name) || empty($price)) {
+        if (empty($product_name) || empty($price)) {
             $this->call->session->set_flashdata('error', 'Name and price are required');
             redirect('admin/edit_product/' . $id);
             return;
@@ -172,7 +171,7 @@ class Admin extends Controller {
         
         try {
             $product_data = array(
-                'name' => trim($name),
+                'product_name' => trim($product_name),
                 'description' => trim($description),
                 'price' => floatval($price),
                 'stock' => intval($stock),

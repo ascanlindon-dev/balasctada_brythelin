@@ -80,10 +80,9 @@ $config['ENVIRONMENT']             = 'development';
 |
 */
 // Dynamic base URL - works for both localhost and Render
-$http_protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
-$domain = $_SERVER['HTTP_HOST'];
 
-$config['base_url'] = $http_protocol . $domain . '/';
+
+$config['base_url'] = 'http://localhost:3000';
 
 /*
 |--------------------------------------------------------------------------
@@ -94,7 +93,7 @@ $config['base_url'] = $http_protocol . $domain . '/';
 | variable to blank.
 |
 */
-$config['index_page']               = 'index.php';
+$config['index_page']               = '';
 
 /*
 |--------------------------------------------------------------------------

@@ -24,7 +24,10 @@ class User extends Model {
      */
     public function create_user($data) {
         try {
-            return $this->db->table('buyers')->insert($data);
+            // Only allow new structure fields
+            $allowed = ['full_name', 'email', 'phone_number', 'password', 'created_at'];
+            $insert = array_intersect_key($data, array_flip($allowed));
+            return $this->db->table('buyers')->insert($insert);
         } catch (Exception $e) {
             throw new Exception("Database error in create_user: " . $e->getMessage());
         }
@@ -75,7 +78,10 @@ class User extends Model {
      */
     public function update_user($buyer_id, $data) {
         try {
-            return $this->db->table('buyers')->where('buyer_id', $buyer_id)->update($data);
+            // Only allow new structure fields
+            $allowed = ['full_name', 'email', 'phone_number', 'password', 'created_at'];
+            $update = array_intersect_key($data, array_flip($allowed));
+            return $this->db->table('buyers')->where('buyer_id', $buyer_id)->update($update);
         } catch (Exception $e) {
             throw new Exception("Database error in update_user: " . $e->getMessage());
         }
