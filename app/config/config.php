@@ -82,7 +82,7 @@ $config['ENVIRONMENT']             = 'development';
 // Dynamic base URL - works for both localhost and Render
 
 
-$config['base_url'] = 'http://localhost:3000';
+$config['base_url'] = 'https://balasctada-brythelin.onrender.com';
 
 /*
 |--------------------------------------------------------------------------
