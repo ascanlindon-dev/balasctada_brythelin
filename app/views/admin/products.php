@@ -331,8 +331,7 @@
                             </div>
                             
                             <div class="product-meta">
-                                Stock: <?= $product['stock'] ?> | 
-                                Created by: <?= htmlspecialchars($product['created_by']) ?>
+                                Stock: <?= $product['stock'] ?>
                             </div>
                             
                             <div class="product-actions">

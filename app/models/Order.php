@@ -12,7 +12,7 @@ class Order extends Model {
      */
     public function get_orders_by_buyer($buyer_id) {
         try {
-            return $this->db->table('orders')->where('buyer_id', $buyer_id)->order_by('id', 'DESC')->get_all();
+            return $this->db->table('orders')->where('buyer_id', $buyer_id)->order_by('order_id', 'DESC')->get_all();
         } catch (Exception $e) {
             throw new Exception("Database error in get_orders_by_buyer: " . $e->getMessage());
         }
@@ -23,7 +23,7 @@ class Order extends Model {
      */
     public function get_order_by_id($order_id) {
         try {
-            return $this->db->table('orders')->where('id', $order_id)->get();
+            return $this->db->table('orders')->where('order_id', $order_id)->get();
         } catch (Exception $e) {
             throw new Exception("Database error in get_order_by_id: " . $e->getMessage());
         }
