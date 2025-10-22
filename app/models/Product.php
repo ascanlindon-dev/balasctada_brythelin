@@ -93,7 +93,8 @@ class Product extends Model {
      */
     public function get_active_products() {
         try {
-            return $this->db->table('products')->get_all();
+            // Only show products with stock > 0
+            return $this->db->table('products')->where('stock >', 0)->order_by('product_id', 'DESC')->get_all();
         } catch (Exception $e) {
             throw new Exception("Database error in get_active_products: " . $e->getMessage());
         }
