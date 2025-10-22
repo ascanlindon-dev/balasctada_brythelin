@@ -335,8 +335,8 @@
                             </div>
                             
                             <div class="product-actions">
-                                <a href="<?= site_url('admin/edit_product/' . $product['id']) ?>" class="btn btn-warning btn-sm">Edit</a>
-                                <a href="<?= site_url('admin/delete_product/' . $product['id']) ?>" 
+                                <a href="<?= site_url('admin/edit_product/' . $product['product_id']) ?>" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="<?= site_url('admin/delete_product/' . $product['product_id']) ?>"
                                    class="btn btn-danger btn-sm" 
                                    onclick="return confirm('Are you sure you want to delete this product?')">Delete</a>
                             </div>
