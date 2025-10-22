@@ -879,11 +879,11 @@
                                 </div>
                                 <?php if ($product['stock'] > 0): ?>
                                     <div class="product-actions">
-                                        <form action="<?= site_url('auth/add_to_cart/' . $product['id']) ?>" method="POST" class="add-to-cart-form">
+                                        <form action="<?= site_url('auth/add_to_cart/' . $product['product_id']) ?>" method="POST" class="add-to-cart-form">
                                             <div class="quantity-selector">
-                                                <label for="quantity_<?= $product['id'] ?>">Qty:</label>
+                                                <label for="quantity_<?= $product['product_id'] ?>">Qty:</label>
                                                 <input type="number" 
-                                                       id="quantity_<?= $product['id'] ?>" 
+                                                       id="quantity_<?= $product['product_id'] ?>" 
                                                        name="quantity" 
                                                        value="1" 
                                                        min="1" 
@@ -1087,20 +1087,6 @@
                         <a href="#" class="product-btn">Coming Soon</a>
                     </div>
                 <?php endif; ?>
-            </div>
-        </div>
-        
-        <div class="test-info">
-            <h3>📊 Database Information</h3>
-            <div class="test-details">
-                <p><strong>Database Table:</strong> buyers</p>
-                <p><strong>Your ID:</strong> <?= htmlspecialchars($user['buyer_id']) ?></p>
-                <p><strong>Total Registered Users:</strong> <?= isset($total_users) ? $total_users : '0' ?></p>
-                <p><strong>Registration:</strong> ✅ Working</p>
-                <p><strong>Login:</strong> ✅ Working</p>
-                <p><strong>Session Management:</strong> ✅ Working</p>
-                <p><strong>Password Security:</strong> ✅ Hashed with PHP password_hash()</p>
-                <p><strong>Database Connection:</strong> ✅ Active</p>
             </div>
         </div>
     </div>
