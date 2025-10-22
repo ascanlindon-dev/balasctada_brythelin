@@ -922,7 +922,7 @@
                     <?php foreach ($orders as $order): ?>
                         <div class="order-item">
                             <div class="order-info">
-                                <div class="order-id">Order #<?= $order['id'] ?></div>
+                                <div class="order-id">Order #<?= $order['order_id'] ?></div>
                                 <div class="order-status">Status: <?= ucfirst($order['status']) ?> | Date: <?= date('M d, Y', strtotime($order['created_at'])) ?></div>
                             </div>
                             <div class="order-amount">$<?= number_format($order['total_amount'], 2) ?></div>
