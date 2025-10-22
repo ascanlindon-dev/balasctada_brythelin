@@ -842,11 +842,9 @@
             <div class="profile-header">
                 <div class="profile-info">
                     <h2>Welcome, <?= htmlspecialchars($user['full_name']) ?>!</h2>
-                    <p>Email: <?= htmlspecialchars($user['email']) ?> | Phone: <?= htmlspecialchars($user['phone_number']) ?></p>
+                   
                 </div>
-                <div>
-                    <a href="<?= site_url('auth/logout') ?>" class="action-btn">Logout</a>
-                </div>
+                
             </div>
 
             <div class="profile-tabs">
