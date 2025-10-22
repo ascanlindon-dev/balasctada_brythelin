@@ -280,7 +280,7 @@
                     <?php foreach (array_slice($recent_products, 0, 5) as $product): ?>
                         <div class="product-item">
                             <div class="product-info">
-                                <div class="product-name"><?= htmlspecialchars($product['name']) ?></div>
+                                <div class="product-name"><?= htmlspecialchars($product['product_name']) ?></div>
                                 <div class="product-price">$<?= number_format($product['price'], 2) ?></div>
                             </div>
                             <span style="color: #28a745; font-weight: bold;">Available</span>

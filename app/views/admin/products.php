@@ -312,7 +312,7 @@
                 <?php foreach ($products as $product): ?>
                     <div class="product-card">
                         <?php if (!empty($product['image_url'])): ?>
-                            <img src="<?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="product-image">
+                            <img src="<?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['product_name']) ?>" class="product-image">
                         <?php else: ?>
                             <div class="product-image" style="display: flex; align-items: center; justify-content: center; color: #999;">
                                 No Image
@@ -320,7 +320,7 @@
                         <?php endif; ?>
                         
                         <div class="product-content">
-                            <div class="product-name"><?= htmlspecialchars($product['name']) ?></div>
+                            <div class="product-name"><?= htmlspecialchars($product['product_name']) ?></div>
                             
                             <?php if (!empty($product['description'])): ?>
                                 <div class="product-description"><?= htmlspecialchars($product['description']) ?></div>

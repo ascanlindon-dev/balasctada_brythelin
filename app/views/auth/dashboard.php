@@ -863,12 +863,12 @@
                         <?php foreach ($products as $product): ?>
                             <div class="product-card">
                                 <?php if (!empty($product['image_url'])): ?>
-                                    <img src="<?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="product-image">
+                                    <img src="<?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['product_name']) ?>" class="product-image">
                                 <?php else: ?>
                                     <div class="product-image placeholder">🎨</div>
                                 <?php endif; ?>
                                 <div class="product-info">
-                                    <div class="product-title"><?= htmlspecialchars($product['name']) ?></div>
+                                    <div class="product-title"><?= htmlspecialchars($product['product_name']) ?></div>
                                     <div class="product-description"><?= htmlspecialchars($product['description'] ?: 'High-quality product available now!') ?></div>
                                     <div class="product-price">$<?= number_format($product['price'], 2) ?></div>
                                     <div class="product-stock">
@@ -1010,11 +1010,11 @@
                         <?php foreach ($products as $product): ?>
                             <div class="product-card">
                                 <?php if (!empty($product['image_url'])): ?>
-                                    <img src="<?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="product-image" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">
+                                    <img src="<?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['product_name']) ?>" class="product-image" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">
                                 <?php else: ?>
                                     <div class="product-image">🎨</div>
                                 <?php endif; ?>
-                                <div class="product-title"><?= htmlspecialchars($product['name']) ?></div>
+                                <div class="product-title"><?= htmlspecialchars($product['product_name']) ?></div>
                                 <div class="product-description"><?= htmlspecialchars($product['description'] ?: 'No description available') ?></div>
                                 <div class="product-price">$<?= number_format($product['price'], 2) ?></div>
                                 <div style="margin-top: 1rem;">
@@ -1070,11 +1070,11 @@
                     <?php foreach ($products as $product): ?>
                         <div class="product-card">
                             <?php if (!empty($product['image_url'])): ?>
-                                <img src="<?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="product-image" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">
+                                <img src="<?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['product_name']) ?>" class="product-image" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">
                             <?php else: ?>
                                 <div class="product-image">🎨</div>
                             <?php endif; ?>
-                            <div class="product-title"><?= htmlspecialchars($product['name']) ?></div>
+                            <div class="product-title"><?= htmlspecialchars($product['product_name']) ?></div>
                             <div class="product-description"><?= htmlspecialchars($product['description'] ?: 'No description available') ?></div>
                             <div class="product-price">$<?= number_format($product['price'], 2) ?></div>
                             <a href="#" class="product-btn">View Details</a>

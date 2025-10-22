@@ -246,7 +246,7 @@
             <form action="<?= site_url('admin/do_edit_product/' . $product['id']) ?>" method="POST">
                 <div class="form-group">
                     <label for="name" class="form-label">Product Name *</label>
-                    <input type="text" id="name" name="name" class="form-input" value="<?= htmlspecialchars($product['name']) ?>" required>
+                    <input type="text" id="name" name="name" class="form-input" value="<?= htmlspecialchars($product['product_name']) ?>" required>
                 </div>
 
                 <div class="form-group">
