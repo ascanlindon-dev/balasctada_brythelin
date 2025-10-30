@@ -7,7 +7,6 @@ class Auth extends Controller {
         parent::__construct();
         $this->call->model('User');
         $this->call->model('Product');
-        $this->call->model('Order');
     }
     
     /**
@@ -103,11 +102,11 @@ class Auth extends Controller {
             $data['total_users'] = $this->User->get_total_users();
             $data['current_user_registration'] = $this->User->get_user_registration_date($data['user']['buyer_id']);
             $data['products'] = $this->Product->get_active_products();
-            $data['orders'] = $this->Order->get_orders_by_buyer($data['user']['buyer_id']);
-            $data['cart_items'] = $this->Order->get_cart_items($data['user']['buyer_id']);
-            $data['cart_total'] = $this->Order->get_cart_total($data['user']['buyer_id']);
-            $data['buying_stats'] = $this->Order->get_buying_stats($data['user']['buyer_id']);
-            $data['recent_orders'] = $this->Order->get_recent_orders_with_details($data['user']['buyer_id'], 3);
+            $data['orders'] = array();
+            $data['cart_items'] = array();
+            $data['cart_total'] = 0;
+            $data['buying_stats'] = array();
+            $data['recent_orders'] = array();
         } catch (Exception $e) {
             $data['total_users'] = 0;
             $data['current_user_registration'] = 'Unknown';
