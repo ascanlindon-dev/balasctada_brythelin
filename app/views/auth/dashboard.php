@@ -1016,7 +1016,7 @@
                                 <div class="product-description"><?= htmlspecialchars($product['description'] ?: 'No description available') ?></div>
                                 <div class="product-price">$<?= number_format($product['price'], 2) ?></div>
                                 <div style="margin-top: 1rem;">
-                                    <form action="<?= site_url('auth/add_to_cart/' . $product['id']) ?>" method="POST" style="display: flex; gap: 0.5rem; align-items: center;">
+                                    <form action="<?= site_url('auth/add_to_cart/' . $product['product_id']) ?>" method="POST" style="display: flex; gap: 0.5rem; align-items: center;">
                                         <input type="number" name="quantity" value="1" min="1" max="<?= $product['stock'] ?>" class="quantity-input">
                                         <button type="submit" class="action-btn btn-sm">Add to Cart</button>
                                     </form>
