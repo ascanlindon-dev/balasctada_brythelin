@@ -1,5 +1,5 @@
 <?php
-// Migration for new buyers, products, and orders tables
+// Migration for new buyers and products tables
 class Migration_NewTables extends Migration {
     public function up() {
         // Buyers table
