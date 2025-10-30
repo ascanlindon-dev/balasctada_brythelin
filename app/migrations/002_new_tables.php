@@ -83,66 +83,9 @@ class Migration_NewTables extends Migration {
         $this->dbforge->add_key('product_name');
         $this->dbforge->create_table('products', TRUE);
 
-        // Orders table
-        $this->dbforge->add_field(array(
-            'order_id' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'unsigned' => TRUE,
-                'auto_increment' => TRUE
-            ),
-            'buyer_id' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'unsigned' => TRUE,
-                'null' => FALSE
-            ),
-            'order_date' => array(
-                'type' => 'DATETIME',
-                'null' => TRUE
-            ),
-            'total_amount' => array(
-                'type' => 'DECIMAL',
-                'constraint' => '10,2',
-                'default' => '0.00',
-                'null' => FALSE
-            ),
-            'status' => array(
-                'type' => "ENUM('pending', 'processing', 'shipped', 'delivered', 'cancelled')",
-                'default' => 'pending',
-                'null' => FALSE
-            ),
-            'payment_method' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 50,
-                'null' => TRUE
-            ),
-            'shipping_address' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 255,
-                'null' => TRUE
-            ),
-            'notes' => array(
-                'type' => 'TEXT',
-                'null' => TRUE
-            ),
-            'created_at' => array(
-                'type' => 'DATETIME',
-                'null' => TRUE
-            ),
-            'updated_at' => array(
-                'type' => 'DATETIME',
-                'null' => TRUE
-            )
-        ));
-        $this->dbforge->add_key('order_id', TRUE);
-        $this->dbforge->add_key('buyer_id');
-        $this->dbforge->add_field("CONSTRAINT fk_orders_buyer FOREIGN KEY (buyer_id) REFERENCES buyers(buyer_id) ON DELETE CASCADE");
-        $this->dbforge->create_table('orders', TRUE);
     }
 
     public function down() {
-        $this->dbforge->drop_table('orders', TRUE);
         $this->dbforge->drop_table('products', TRUE);
         $this->dbforge->drop_table('buyers', TRUE);
     }
