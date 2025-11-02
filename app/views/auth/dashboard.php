@@ -999,46 +999,35 @@
                         <div class="empty-icon">🛒</div>
                         <h3>Your Cart is Empty</h3>
                         <p>Browse our products and add items to your cart!</p>
-                        <button class="shop-now-btn" onclick="showTab('products')">🛍️ Start Shopping</button>
+                        <button class="shop-now-btn" onclick="window.location.href='#products-section'">🛍️ Start Shopping</button>
                     </div>
                 <?php endif; ?>
             </div>
 
-            <!-- Products Tab -->
-            <div id="products" class="tab-content">
-                <h3>Browse Products</h3>
-                <div class="products-grid">
-                    <?php if (!empty($products)): ?>
-                        <?php foreach ($products as $product): ?>
-                            <div class="product-card">
-                                <?php if (!empty($product['image_url'])): ?>
-                                    <img src="<?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['product_name']) ?>" class="product-image" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">
-                                <?php else: ?>
-                                    <div class="product-image">🎨</div>
-                                <?php endif; ?>
-                                <div class="product-title"><?= htmlspecialchars($product['product_name']) ?></div>
-                                <div class="product-description"><?= htmlspecialchars($product['description'] ?: 'No description available') ?></div>
-                                <div class="product-price">$<?= number_format($product['price'], 2) ?></div>
-                                <div style="margin-top: 1rem;">
-                                    <form action="<?= site_url('auth/add_to_cart/' . $product['product_id']) ?>" method="POST" style="display: flex; gap: 0.5rem; align-items: center;">
-                                        <input type="number" name="quantity" value="1" min="1" max="<?= $product['stock'] ?>" class="quantity-input">
-                                        <button type="submit" class="action-btn btn-sm">Add to Cart</button>
-                                    </form>
-                                </div>
+            <!-- Orders Tab -->
+            <div id="orders" class="tab-content">
+                <h3>My Orders</h3>
+                <?php if (!empty($orders)): ?>
+                    <?php foreach ($orders as $order): ?>
+                        <div class="order-item">
+                            <div class="order-info">
+                                <div class="order-id">Order #<?= $order['order_id'] ?></div>
+                                <div class="order-status">Status: <?= ucfirst($order['status']) ?> | Date: <?= date('M d, Y', strtotime($order['created_at'])) ?></div>
                             </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <div class="empty-state">
-                            <h3>No Products Available</h3>
-                            <p>The admin hasn't added any products yet. Check back soon!</p>
+                            <div class="order-amount">$<?= number_format($order['total_amount'], 2) ?></div>
                         </div>
-                    <?php endif; ?>
-                </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="empty-state">
+                        <h3>No Orders Yet</h3>
+                        <p>You haven't placed any orders yet. Start shopping to see your orders here!</p>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
         
-
-        <div style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); margin-bottom: 2rem;">
+        <!-- Products Section -->
+        <div id="products-section" style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); margin-bottom: 2rem;">
             <h2 style="color: #333; margin-bottom: 2rem;">Available Products</h2>
             
             <div class="products-grid">
