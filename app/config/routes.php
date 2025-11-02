@@ -73,6 +73,12 @@ $router->post('/cart/remove', 'CartController::remove');
 $router->get('/cart/clear', 'CartController::clear');
 $router->get('/cart/count', 'CartController::get_count');
 $router->post('/cart/check', 'CartController::check_product');
+$router->get('/cart/debug', 'CartController::debug');
+
+// Debug routes
+$router->get('/debug/migrations', 'DebugSetup::run_migrations');
+$router->get('/debug/session', 'DebugSetup::debug_session');
+$router->get('/debug/create-cart', 'DebugSetup::create_cart_table');
 
 // Admin routes
 $router->get('/admin/dashboard', 'Admin::dashboard');

@@ -290,5 +290,45 @@ class CartController extends Controller {
             echo json_encode(['in_cart' => false]);
         }
     }
+    
+    /**
+     * Debug method to check cart data
+     */
+    public function debug() {
+        if (!$this->call->session->userdata('buyer_id')) {
+            echo "Not logged in";
+            return;
+        }
+        
+        $buyer_id = $this->call->session->userdata('buyer_id');
+        echo "<h3>Debug Cart Information</h3>";
+        echo "<p>Buyer ID: " . $buyer_id . "</p>";
+        
+        try {
+            // Check direct cart table query
+            $cart_items = $this->db->table('cart')->where('buyer_id', $buyer_id)->get_all();
+            echo "<h4>Direct Cart Query Results:</h4>";
+            echo "<pre>" . print_r($cart_items, true) . "</pre>";
+            
+            // Check cart model method
+            $model_items = $this->Cart->get_cart_items($buyer_id);
+            echo "<h4>Cart Model Results:</h4>";
+            echo "<pre>" . print_r($model_items, true) . "</pre>";
+            
+            // Check cart count
+            $count = $this->Cart->get_cart_count($buyer_id);
+            echo "<h4>Cart Count:</h4>";
+            echo "<p>" . $count . "</p>";
+            
+            // Check if cart table exists
+            $tables = $this->db->query("SHOW TABLES")->result_array();
+            echo "<h4>Available Tables:</h4>";
+            echo "<pre>" . print_r($tables, true) . "</pre>";
+            
+        } catch (Exception $e) {
+            echo "<h4>Error:</h4>";
+            echo "<p>" . $e->getMessage() . "</p>";
+        }
+    }
 }
 ?>

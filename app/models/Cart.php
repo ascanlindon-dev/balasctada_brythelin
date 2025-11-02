@@ -12,18 +12,25 @@ class Cart extends Model {
      */
     public function add_to_cart($buyer_id, $product_id, $quantity = 1) {
         try {
+            // Debug: Log the parameters
+            error_log("Cart::add_to_cart - buyer_id: $buyer_id, product_id: $product_id, quantity: $quantity");
+            
             // Check if item already exists in cart
             $existing = $this->db->table('cart')
                                 ->where('buyer_id', $buyer_id)
                                 ->where('product_id', $product_id)
                                 ->get();
             
+            error_log("Cart::add_to_cart - existing item: " . print_r($existing, true));
+            
             if ($existing) {
                 // Update quantity if item exists
                 $new_quantity = $existing['quantity'] + $quantity;
-                return $this->db->table('cart')
+                $result = $this->db->table('cart')
                                ->where('cart_id', $existing['cart_id'])
                                ->update(['quantity' => $new_quantity]);
+                error_log("Cart::add_to_cart - update result: " . ($result ? 'success' : 'failed'));
+                return $result;
             } else {
                 // Insert new item
                 $data = [
@@ -31,9 +38,13 @@ class Cart extends Model {
                     'product_id' => $product_id,
                     'quantity' => $quantity
                 ];
-                return $this->db->table('cart')->insert($data);
+                error_log("Cart::add_to_cart - inserting data: " . print_r($data, true));
+                $result = $this->db->table('cart')->insert($data);
+                error_log("Cart::add_to_cart - insert result: " . ($result ? 'success' : 'failed'));
+                return $result;
             }
         } catch (Exception $e) {
+            error_log("Cart::add_to_cart - Exception: " . $e->getMessage());
             throw new Exception("Database error in add_to_cart: " . $e->getMessage());
         }
     }
