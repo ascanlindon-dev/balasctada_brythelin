@@ -155,14 +155,15 @@ class Setup_web extends Controller {
                 // Create cart table
                 $create_cart_table = "
                 CREATE TABLE cart (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
-                    buyer_id INT NOT NULL,
-                    product_id INT NOT NULL,
-                    quantity INT DEFAULT 1,
-                    created_at DATETIME NULL,
-                    FOREIGN KEY (buyer_id) REFERENCES buyers(buyer_id),
-                    FOREIGN KEY (product_id) REFERENCES products(id)
-                )";
+                    cart_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                    buyer_id INT UNSIGNED NOT NULL,
+                    product_id INT UNSIGNED NOT NULL,
+                    quantity INT NOT NULL DEFAULT 1,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    FOREIGN KEY (buyer_id) REFERENCES buyers(buyer_id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE ON UPDATE CASCADE
+                ) ENGINE=InnoDB";
                 
                 if ($this->call->database->raw($create_cart_table)) {
                     echo "<div class='success'>✓ Cart table created successfully</div>";
@@ -307,6 +308,83 @@ class Setup_web extends Controller {
             
         } catch (Exception $e) {
             echo "<div class='error'>Error: " . $e->getMessage() . "</div>";
+        }
+    }
+    
+    /**
+     * Recreate cart table specifically
+     */
+    public function fix_cart() {
+        echo "<h1>Fixing Cart Table</h1>";
+        echo "<style>body{font-family:Arial;padding:20px;} .success{color:green;} .error{color:red;}</style>";
+        
+        try {
+            $this->call->library('database');
+            
+            // Drop cart table if exists
+            echo "<h2>1. Dropping existing cart table...</h2>";
+            $this->call->database->raw("DROP TABLE IF EXISTS cart");
+            echo "<div class='success'>✓ Cart table dropped</div>";
+            
+            // Create new cart table with correct structure
+            echo "<h2>2. Creating new cart table...</h2>";
+            $create_cart_table = "
+            CREATE TABLE cart (
+                cart_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                buyer_id INT UNSIGNED NOT NULL,
+                product_id INT UNSIGNED NOT NULL,
+                quantity INT NOT NULL DEFAULT 1,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB";
+            
+            if ($this->call->database->raw($create_cart_table)) {
+                echo "<div class='success'>✓ Cart table created successfully</div>";
+                
+                // Add foreign key constraints
+                echo "<h2>3. Adding foreign key constraints...</h2>";
+                try {
+                    $this->call->database->raw("ALTER TABLE cart ADD CONSTRAINT fk_cart_buyer FOREIGN KEY (buyer_id) REFERENCES buyers(buyer_id) ON DELETE CASCADE ON UPDATE CASCADE");
+                    echo "<div class='success'>✓ Buyer foreign key added</div>";
+                } catch (Exception $e) {
+                    echo "<div class='error'>⚠️ Buyer foreign key failed: " . $e->getMessage() . "</div>";
+                }
+                
+                try {
+                    $this->call->database->raw("ALTER TABLE cart ADD CONSTRAINT fk_cart_product FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE ON UPDATE CASCADE");
+                    echo "<div class='success'>✓ Product foreign key added</div>";
+                } catch (Exception $e) {
+                    echo "<div class='error'>⚠️ Product foreign key failed: " . $e->getMessage() . "</div>";
+                }
+                
+                // Show table structure
+                echo "<h2>4. Cart table structure:</h2>";
+                $structure = $this->call->database->raw("DESCRIBE cart")->fetchAll();
+                echo "<table border='1' style='border-collapse:collapse;'>";
+                echo "<tr><th>Field</th><th>Type</th><th>Null</th><th>Key</th><th>Default</th><th>Extra</th></tr>";
+                foreach ($structure as $column) {
+                    echo "<tr>";
+                    echo "<td>{$column['Field']}</td>";
+                    echo "<td>{$column['Type']}</td>";
+                    echo "<td>{$column['Null']}</td>";
+                    echo "<td>{$column['Key']}</td>";
+                    echo "<td>{$column['Default']}</td>";
+                    echo "<td>{$column['Extra']}</td>";
+                    echo "</tr>";
+                }
+                echo "</table>";
+                
+                echo "<h2>✅ Cart table fixed successfully!</h2>";
+                echo "<p>You can now test adding items to cart.</p>";
+                echo "<p><a href='" . site_url('auth/dashboard') . "' style='background:#667eea;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;'>Go to Dashboard</a></p>";
+                
+            } else {
+                echo "<div class='error'>✗ Failed to create cart table</div>";
+            }
+            
+        } catch (Exception $e) {
+            echo "<div class='error'>Error: " . $e->getMessage() . "</div>";
+            echo "<pre>" . $e->getTraceAsString() . "</pre>";
         }
     }
 }

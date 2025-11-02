@@ -210,5 +210,34 @@ class Cart extends Model {
             throw new Exception("Database error in get_cart_with_buyer: " . $e->getMessage());
         }
     }
+    
+    /**
+     * Test method to verify cart functionality
+     */
+    public function test_cart($buyer_id) {
+        try {
+            // Test basic insert
+            $test_data = [
+                'buyer_id' => $buyer_id,
+                'product_id' => 1, // Assuming product ID 1 exists
+                'quantity' => 1
+            ];
+            
+            $insert_result = $this->db->table('cart')->insert($test_data);
+            
+            // Test retrieval
+            $items = $this->db->table('cart')->where('buyer_id', $buyer_id)->get_all();
+            
+            return [
+                'insert_success' => $insert_result,
+                'items_count' => count($items),
+                'items' => $items
+            ];
+        } catch (Exception $e) {
+            return [
+                'error' => $e->getMessage()
+            ];
+        }
+    }
 }
 ?>

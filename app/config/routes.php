@@ -49,6 +49,7 @@ $router->get('/', 'Auth::login');
 $router->get('/setup', 'Setup_web::index');
 $router->get('/setup_web', 'Setup_web::index');
 $router->get('/setup_web/reset', 'Setup_web::reset');
+$router->get('/setup_web/fix_cart', 'Setup_web::fix_cart');
 
 // Authentication routes
 $router->get('/auth/login', 'Auth::login');
