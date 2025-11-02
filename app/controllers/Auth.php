@@ -7,6 +7,7 @@ class Auth extends Controller {
         parent::__construct();
         $this->call->model('User');
         $this->call->model('Product');
+        $this->call->model('Cart');
     }
     
     /**
@@ -368,6 +369,7 @@ class Auth extends Controller {
         }
         
         if (!$product_id) {
+            $this->call->session->set_flashdata('error', 'Invalid product');
             redirect('auth/dashboard');
             return;
         }
@@ -376,7 +378,29 @@ class Auth extends Controller {
             $buyer_id = $this->call->session->userdata('buyer_id');
             $quantity = $this->call->io->post('quantity') ?: 1;
             
-            if ($this->Order->add_to_cart($buyer_id, $product_id, $quantity)) {
+            // Validate quantity
+            if ($quantity < 1) {
+                $this->call->session->set_flashdata('error', 'Invalid quantity');
+                redirect('auth/dashboard');
+                return;
+            }
+            
+            // Check if product exists and has enough stock
+            $product = $this->Product->get_product_by_id($product_id);
+            if (!$product) {
+                $this->call->session->set_flashdata('error', 'Product not found');
+                redirect('auth/dashboard');
+                return;
+            }
+            
+            if ($product['stock'] < $quantity) {
+                $this->call->session->set_flashdata('error', 'Not enough stock available');
+                redirect('auth/dashboard');
+                return;
+            }
+            
+            // Add to cart
+            if ($this->Cart->add_to_cart($buyer_id, $product_id, $quantity)) {
                 $this->call->session->set_flashdata('success', 'Product added to cart successfully!');
             } else {
                 $this->call->session->set_flashdata('error', 'Failed to add product to cart');
@@ -403,7 +427,7 @@ class Auth extends Controller {
         }
         
         try {
-            if ($this->Order->remove_from_cart($cart_id)) {
+            if ($this->Cart->remove_from_cart($cart_id)) {
                 $this->call->session->set_flashdata('success', 'Item removed from cart');
             } else {
                 $this->call->session->set_flashdata('error', 'Failed to remove item from cart');
@@ -433,7 +457,7 @@ class Auth extends Controller {
         }
         
         try {
-            if ($this->Order->update_cart_quantity($cart_id, $quantity)) {
+            if ($this->Cart->update_cart_quantity($cart_id, $quantity)) {
                 $this->call->session->set_flashdata('success', 'Cart updated successfully');
             } else {
                 $this->call->session->set_flashdata('error', 'Failed to update cart');
