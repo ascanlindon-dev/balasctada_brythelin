@@ -555,68 +555,6 @@
             color: white;
         }
         
-        .product-stock {
-            color: #28a745;
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-bottom: 1rem;
-        }
-        
-        .product-actions {
-            padding: 0 1.5rem 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-        
-        .quantity-selector {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .quantity-selector label {
-            font-size: 0.9rem;
-            color: #666;
-            font-weight: 500;
-        }
-        
-        .qty-input {
-            width: 60px;
-            padding: 0.5rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            text-align: center;
-        }
-        
-        .add-to-cart-btn {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 5px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            width: 100%;
-        }
-        
-        .add-to-cart-btn:hover {
-            background: linear-gradient(135deg, #218838 0%, #1abc9c 100%);
-            transform: translateY(-2px);
-        }
-        
-        .add-to-cart-btn:disabled {
-            background: #6c757d;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .out-of-stock {
-            background: #dc3545 !important;
-            cursor: not-allowed !important;
-        }
-        
         .add-product-card {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -893,9 +831,6 @@
             <div class="nav-brand">CRAFTIFY Products</div>
             <div class="nav-user">
                 <span>Welcome, <?= htmlspecialchars($user['full_name']) ?>!</span>
-                <a href="<?= site_url('cart') ?>" class="logout-btn" style="margin-right: 1rem;">
-                    🛒 Cart <span class="cart-count">0</span>
-                </a>
                 <a href="<?= site_url('auth/logout') ?>" class="logout-btn">Logout</a>
             </div>
         </div>
@@ -913,9 +848,70 @@
             </div>
 
             <div class="profile-tabs">
-                <button class="tab-btn active" onclick="showTab('cart')">🛒 My Cart</button>
+                <button class="tab-btn active" onclick="showTab('products')">🛍️ Shop Products</button>
+                <button class="tab-btn" onclick="showTab('cart')">🛒 My Cart</button>
                 <button class="tab-btn" onclick="showTab('orders')">📦 Order History</button>
             </div>
+
+            <!-- Products Tab -->
+            <div id="products" class="tab-content active">
+                <h3>🛍️ Shop Our Products</h3>
+                <div class="products-grid">
+                    <?php if (!empty($products)): ?>
+                        <?php foreach ($products as $product): ?>
+                            <div class="product-card">
+                                <?php if (!empty($product['image_url'])): ?>
+                                    <img src="<?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['product_name']) ?>" class="product-image">
+                                <?php else: ?>
+                                    <div class="product-image placeholder">🎨</div>
+                                <?php endif; ?>
+                                <div class="product-info">
+                                    <div class="product-title"><?= htmlspecialchars($product['product_name']) ?></div>
+                                    <div class="product-description"><?= htmlspecialchars($product['description'] ?: 'High-quality product available now!') ?></div>
+                                    <div class="product-price">$<?= number_format($product['price'], 2) ?></div>
+                                    <div class="product-stock">
+                                        <?php if ($product['stock'] > 0): ?>
+                                            <span class="in-stock">✅ In Stock (<?= $product['stock'] ?> available)</span>
+                                        <?php else: ?>
+                                            <span class="out-of-stock">❌ Out of Stock</span>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                                <?php if ($product['stock'] > 0): ?>
+                                    <div class="product-actions">
+                                        <form action="<?= site_url('auth/add_to_cart/' . $product['product_id']) ?>" method="POST" class="add-to-cart-form">
+                                            <div class="quantity-selector">
+                                                <label for="quantity_<?= $product['product_id'] ?>">Qty:</label>
+                                                <input type="number" 
+                                                       id="quantity_<?= $product['product_id'] ?>" 
+                                                       name="quantity" 
+                                                       value="1" 
+                                                       min="1" 
+                                                       max="<?= $product['stock'] ?>" 
+                                                       class="quantity-input">
+                                            </div>
+                                            <button type="submit" class="add-to-cart-btn">🛒 Add to Cart</button>
+                                        </form>
+                                    </div>
+                                <?php else: ?>
+                                    <div class="product-actions">
+                                        <button class="add-to-cart-btn disabled" disabled>Out of Stock</button>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="empty-state">
+                            <div class="empty-icon">🏪</div>
+                            <h3>Store Coming Soon!</h3>
+                            <p>We're setting up our product catalog. Check back soon for amazing products!</p>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+                
+
+
 
             </div>
 
@@ -941,7 +937,7 @@
             </div>
 
             <!-- Cart Tab -->
-            <div id="cart" class="tab-content active">
+            <div id="cart" class="tab-content">
                 <h3>🛒 My Shopping Cart</h3>
                 <?php if (!empty($cart_items)): ?>
                     <div class="cart-items">
@@ -999,36 +995,73 @@
                         <div class="empty-icon">🛒</div>
                         <h3>Your Cart is Empty</h3>
                         <p>Browse our products and add items to your cart!</p>
-                        <button class="shop-now-btn" onclick="window.location.href='#products-section'">🛍️ Start Shopping</button>
+                        <button class="shop-now-btn" onclick="showTab('products')">🛍️ Start Shopping</button>
                     </div>
                 <?php endif; ?>
             </div>
 
-            <!-- Orders Tab -->
-            <div id="orders" class="tab-content">
-                <h3>My Orders</h3>
-                <?php if (!empty($orders)): ?>
-                    <?php foreach ($orders as $order): ?>
-                        <div class="order-item">
-                            <div class="order-info">
-                                <div class="order-id">Order #<?= $order['order_id'] ?></div>
-                                <div class="order-status">Status: <?= ucfirst($order['status']) ?> | Date: <?= date('M d, Y', strtotime($order['created_at'])) ?></div>
+            <!-- Products Tab -->
+            <div id="products" class="tab-content">
+                <h3>Browse Products</h3>
+                <div class="products-grid">
+                    <?php if (!empty($products)): ?>
+                        <?php foreach ($products as $product): ?>
+                            <div class="product-card">
+                                <?php if (!empty($product['image_url'])): ?>
+                                    <img src="<?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['product_name']) ?>" class="product-image" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">
+                                <?php else: ?>
+                                    <div class="product-image">🎨</div>
+                                <?php endif; ?>
+                                <div class="product-title"><?= htmlspecialchars($product['product_name']) ?></div>
+                                <div class="product-description"><?= htmlspecialchars($product['description'] ?: 'No description available') ?></div>
+                                <div class="product-price">$<?= number_format($product['price'], 2) ?></div>
+                                <div style="margin-top: 1rem;">
+                                    <form action="<?= site_url('auth/add_to_cart/' . $product['product_id']) ?>" method="POST" style="display: flex; gap: 0.5rem; align-items: center;">
+                                        <input type="number" name="quantity" value="1" min="1" max="<?= $product['stock'] ?>" class="quantity-input">
+                                        <button type="submit" class="action-btn btn-sm">Add to Cart</button>
+                                    </form>
+                                </div>
                             </div>
-                            <div class="order-amount">$<?= number_format($order['total_amount'], 2) ?></div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="empty-state">
+                            <h3>No Products Available</h3>
+                            <p>The admin hasn't added any products yet. Check back soon!</p>
                         </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <div class="empty-state">
-                        <h3>No Orders Yet</h3>
-                        <p>You haven't placed any orders yet. Start shopping to see your orders here!</p>
-                    </div>
-                <?php endif; ?>
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
         
-        <!-- Products Section -->
-        <div id="products-section" style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); margin-bottom: 2rem;">
-            <h2 style="color: #333; margin-bottom: 2rem;">Available Products</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">👤</div>
+                <div class="stat-title">Account Status</div>
+                <div class="stat-value">Active</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">�</div>
+                <div class="stat-title">Orders</div>
+                <div class="stat-value">0</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">❤️</div>
+                <div class="stat-title">Favorites</div>
+                <div class="stat-value">0</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">🎯</div>
+                <div class="stat-title">Cart Items</div>
+                <div class="stat-value">0</div>
+            </div>
+        </div>
+        
+
+        <div style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); margin-bottom: 2rem;">
+            <h2 style="color: #333; margin-bottom: 2rem;">Featured Products</h2>
             
             <div class="products-grid">
                 <?php if (!empty($products)): ?>
@@ -1039,38 +1072,19 @@
                             <?php else: ?>
                                 <div class="product-image">🎨</div>
                             <?php endif; ?>
-                            <div class="product-info">
-                                <div class="product-title"><?= htmlspecialchars($product['product_name']) ?></div>
-                                <div class="product-description"><?= htmlspecialchars($product['description'] ?: 'No description available') ?></div>
-                                <div class="product-price">$<?= number_format($product['price'], 2) ?></div>
-                                <div class="product-stock">Stock: <?= $product['stock'] ?> available</div>
-                            </div>
-                            <div class="product-actions">
-                                <?php if ($product['stock'] > 0): ?>
-                                    <div class="quantity-selector">
-                                        <label for="qty_<?= $product['product_id'] ?>">Qty:</label>
-                                        <input type="number" id="qty_<?= $product['product_id'] ?>" min="1" max="<?= $product['stock'] ?>" value="1" class="qty-input">
-                                    </div>
-                                    <button class="add-to-cart-btn" onclick="addToCart(<?= $product['product_id'] ?>)" data-product-id="<?= $product['product_id'] ?>">
-                                        Add to Cart
-                                    </button>
-                                <?php else: ?>
-                                    <button class="product-btn out-of-stock" disabled>Out of Stock</button>
-                                <?php endif; ?>
-                            </div>
+                            <div class="product-title"><?= htmlspecialchars($product['product_name']) ?></div>
+                            <div class="product-description"><?= htmlspecialchars($product['description'] ?: 'No description available') ?></div>
+                            <div class="product-price">$<?= number_format($product['price'], 2) ?></div>
+                            <a href="#" class="product-btn">View Details</a>
                         </div>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <div class="product-card">
-                        <div class="product-image">📦</div>
-                        <div class="product-info">
-                            <div class="product-title">No Products Available</div>
-                            <div class="product-description">The admin hasn't added any products yet. Check back soon!</div>
-                            <div class="product-price">-</div>
-                        </div>
-                        <div class="product-actions">
-                            <button class="product-btn" disabled>Coming Soon</button>
-                        </div>
+                        <div class="product-image">�</div>
+                        <div class="product-title">No Products Available</div>
+                        <div class="product-description">The admin hasn't added any products yet. Check back soon!</div>
+                        <div class="product-price">-</div>
+                        <a href="#" class="product-btn">Coming Soon</a>
                     </div>
                 <?php endif; ?>
             </div>
@@ -1094,64 +1108,6 @@
             event.target.classList.add('active');
         }
         
-        function addToCart(productId) {
-            const quantityInput = document.getElementById('qty_' + productId);
-            const quantity = quantityInput ? quantityInput.value : 1;
-            const button = document.querySelector(`button[data-product-id="${productId}"]`);
-            
-            // Disable button and show loading
-            if (button) {
-                button.disabled = true;
-                button.innerHTML = 'Adding...';
-            }
-            
-            fetch('<?= site_url('cart/add') ?>', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `product_id=${productId}&quantity=${quantity}`
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    // Show success message
-                    alert('✅ ' + data.message);
-                    
-                    // Optionally update cart count in navigation if you have it
-                    if (data.cart_count) {
-                        updateCartCount(data.cart_count);
-                    }
-                    
-                    // Reset quantity input
-                    if (quantityInput) {
-                        quantityInput.value = 1;
-                    }
-                } else {
-                    alert('❌ ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('❌ An error occurred while adding the item to cart. Please try again.');
-            })
-            .finally(() => {
-                // Re-enable button
-                if (button) {
-                    button.disabled = false;
-                    button.innerHTML = 'Add to Cart';
-                }
-            });
-        }
-        
-        function updateCartCount(count) {
-            // Update cart count in navigation if you have a cart counter element
-            const cartCountElements = document.querySelectorAll('.cart-count');
-            cartCountElements.forEach(element => {
-                element.textContent = count;
-            });
-        }
-        
         function proceedToCheckout() {
             if (confirm('Proceed to checkout? This will create an order with your current cart items.')) {
                 // For now, show a simple checkout confirmation
@@ -1168,9 +1124,6 @@
         
         // Add some interactive feedback for form submissions
         document.addEventListener('DOMContentLoaded', function() {
-            // Load initial cart count
-            updateCartCount(<?= $cart_count ?>);
-            
             // Add loading states to forms
             const forms = document.querySelectorAll('form');
             forms.forEach(form => {

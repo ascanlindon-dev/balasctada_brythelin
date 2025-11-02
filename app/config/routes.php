@@ -49,7 +49,6 @@ $router->get('/', 'Auth::login');
 $router->get('/setup', 'Setup_web::index');
 $router->get('/setup_web', 'Setup_web::index');
 $router->get('/setup_web/reset', 'Setup_web::reset');
-$router->get('/setup_web/fix_cart', 'Setup_web::fix_cart');
 
 // Authentication routes
 $router->get('/auth/login', 'Auth::login');
@@ -65,21 +64,6 @@ $router->get('/auth/create_test_user', 'Auth::create_test_user');
 $router->post('/auth/add_to_cart/(:any)', 'Auth::add_to_cart/$1');
 $router->get('/auth/remove_from_cart/(:any)', 'Auth::remove_from_cart/$1');
 $router->post('/auth/update_cart', 'Auth::update_cart');
-
-// New Cart Controller routes
-$router->get('/cart', 'CartController::index');
-$router->post('/cart/add', 'CartController::add');
-$router->post('/cart/update', 'CartController::update');
-$router->post('/cart/remove', 'CartController::remove');
-$router->get('/cart/clear', 'CartController::clear');
-$router->get('/cart/count', 'CartController::get_count');
-$router->post('/cart/check', 'CartController::check_product');
-$router->get('/cart/debug', 'CartController::debug');
-
-// Debug routes
-$router->get('/debug/migrations', 'DebugSetup::run_migrations');
-$router->get('/debug/session', 'DebugSetup::debug_session');
-$router->get('/debug/create-cart', 'DebugSetup::create_cart_table');
 
 // Admin routes
 $router->get('/admin/dashboard', 'Admin::dashboard');

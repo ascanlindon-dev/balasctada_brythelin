@@ -83,44 +83,9 @@ class Migration_NewTables extends Migration {
         $this->dbforge->add_key('product_name');
         $this->dbforge->create_table('products', TRUE);
 
-        // Cart table
-        $this->dbforge->add_field(array(
-            'cart_id' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'unsigned' => TRUE,
-                'auto_increment' => TRUE
-            ),
-            'buyer_id' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'unsigned' => TRUE,
-                'null' => FALSE
-            ),
-            'product_id' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'unsigned' => TRUE,
-                'null' => FALSE
-            ),
-            'quantity' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'default' => 1,
-                'null' => FALSE
-            )
-        ));
-        $this->dbforge->add_key('cart_id', TRUE);
-        $this->dbforge->create_table('cart', TRUE);
-        
-        // Add foreign key constraints after table creation
-        $this->db->query('ALTER TABLE cart ADD CONSTRAINT fk_cart_buyer FOREIGN KEY (buyer_id) REFERENCES buyers(buyer_id) ON DELETE CASCADE ON UPDATE CASCADE');
-        $this->db->query('ALTER TABLE cart ADD CONSTRAINT fk_cart_product FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE ON UPDATE CASCADE');
-
     }
 
     public function down() {
-        $this->dbforge->drop_table('cart', TRUE);
         $this->dbforge->drop_table('products', TRUE);
         $this->dbforge->drop_table('buyers', TRUE);
     }
