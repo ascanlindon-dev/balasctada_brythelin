@@ -913,70 +913,9 @@
             </div>
 
             <div class="profile-tabs">
-                <button class="tab-btn active" onclick="showTab('products')">🛍️ Shop Products</button>
-                <button class="tab-btn" onclick="showTab('cart')">🛒 My Cart</button>
+                <button class="tab-btn active" onclick="showTab('cart')">🛒 My Cart</button>
                 <button class="tab-btn" onclick="showTab('orders')">📦 Order History</button>
             </div>
-
-            <!-- Products Tab -->
-            <div id="products" class="tab-content active">
-                <h3>🛍️ Shop Our Products</h3>
-                <div class="products-grid">
-                    <?php if (!empty($products)): ?>
-                        <?php foreach ($products as $product): ?>
-                            <div class="product-card">
-                                <?php if (!empty($product['image_url'])): ?>
-                                    <img src="<?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['product_name']) ?>" class="product-image">
-                                <?php else: ?>
-                                    <div class="product-image placeholder">🎨</div>
-                                <?php endif; ?>
-                                <div class="product-info">
-                                    <div class="product-title"><?= htmlspecialchars($product['product_name']) ?></div>
-                                    <div class="product-description"><?= htmlspecialchars($product['description'] ?: 'High-quality product available now!') ?></div>
-                                    <div class="product-price">$<?= number_format($product['price'], 2) ?></div>
-                                    <div class="product-stock">
-                                        <?php if ($product['stock'] > 0): ?>
-                                            <span class="in-stock">✅ In Stock (<?= $product['stock'] ?> available)</span>
-                                        <?php else: ?>
-                                            <span class="out-of-stock">❌ Out of Stock</span>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-                                <?php if ($product['stock'] > 0): ?>
-                                    <div class="product-actions">
-                                        <form action="<?= site_url('auth/add_to_cart/' . $product['product_id']) ?>" method="POST" class="add-to-cart-form">
-                                            <div class="quantity-selector">
-                                                <label for="quantity_<?= $product['product_id'] ?>">Qty:</label>
-                                                <input type="number" 
-                                                       id="quantity_<?= $product['product_id'] ?>" 
-                                                       name="quantity" 
-                                                       value="1" 
-                                                       min="1" 
-                                                       max="<?= $product['stock'] ?>" 
-                                                       class="quantity-input">
-                                            </div>
-                                            <button type="submit" class="add-to-cart-btn">🛒 Add to Cart</button>
-                                        </form>
-                                    </div>
-                                <?php else: ?>
-                                    <div class="product-actions">
-                                        <button class="add-to-cart-btn disabled" disabled>Out of Stock</button>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <div class="empty-state">
-                            <div class="empty-icon">🏪</div>
-                            <h3>Store Coming Soon!</h3>
-                            <p>We're setting up our product catalog. Check back soon for amazing products!</p>
-                        </div>
-                    <?php endif; ?>
-                </div>
-            </div>
-                
-
-
 
             </div>
 
@@ -1002,7 +941,7 @@
             </div>
 
             <!-- Cart Tab -->
-            <div id="cart" class="tab-content">
+            <div id="cart" class="tab-content active">
                 <h3>🛒 My Shopping Cart</h3>
                 <?php if (!empty($cart_items)): ?>
                     <div class="cart-items">
