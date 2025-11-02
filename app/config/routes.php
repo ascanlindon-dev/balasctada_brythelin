@@ -65,6 +65,15 @@ $router->post('/auth/add_to_cart/(:any)', 'Auth::add_to_cart/$1');
 $router->get('/auth/remove_from_cart/(:any)', 'Auth::remove_from_cart/$1');
 $router->post('/auth/update_cart', 'Auth::update_cart');
 
+// New Cart Controller routes
+$router->get('/cart', 'CartController::index');
+$router->post('/cart/add', 'CartController::add');
+$router->post('/cart/update', 'CartController::update');
+$router->post('/cart/remove', 'CartController::remove');
+$router->get('/cart/clear', 'CartController::clear');
+$router->get('/cart/count', 'CartController::get_count');
+$router->post('/cart/check', 'CartController::check_product');
+
 // Admin routes
 $router->get('/admin/dashboard', 'Admin::dashboard');
 $router->get('/admin/products', 'Admin::products');
