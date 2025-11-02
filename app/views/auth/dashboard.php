@@ -1032,63 +1032,6 @@
                 </div>
             </div>
         </div>
-        
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon">👤</div>
-                <div class="stat-title">Account Status</div>
-                <div class="stat-value">Active</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-icon">�</div>
-                <div class="stat-title">Orders</div>
-                <div class="stat-value">0</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-icon">❤️</div>
-                <div class="stat-title">Favorites</div>
-                <div class="stat-value">0</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-icon">🎯</div>
-                <div class="stat-title">Cart Items</div>
-                <div class="stat-value">0</div>
-            </div>
-        </div>
-        
-
-        <div style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); margin-bottom: 2rem;">
-            <h2 style="color: #333; margin-bottom: 2rem;">Featured Products</h2>
-            
-            <div class="products-grid">
-                <?php if (!empty($products)): ?>
-                    <?php foreach ($products as $product): ?>
-                        <div class="product-card">
-                            <?php if (!empty($product['image_url'])): ?>
-                                <img src="<?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['product_name']) ?>" class="product-image" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">
-                            <?php else: ?>
-                                <div class="product-image">🎨</div>
-                            <?php endif; ?>
-                            <div class="product-title"><?= htmlspecialchars($product['product_name']) ?></div>
-                            <div class="product-description"><?= htmlspecialchars($product['description'] ?: 'No description available') ?></div>
-                            <div class="product-price">$<?= number_format($product['price'], 2) ?></div>
-                            <a href="#" class="product-btn">View Details</a>
-                        </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <div class="product-card">
-                        <div class="product-image">�</div>
-                        <div class="product-title">No Products Available</div>
-                        <div class="product-description">The admin hasn't added any products yet. Check back soon!</div>
-                        <div class="product-price">-</div>
-                        <a href="#" class="product-btn">Coming Soon</a>
-                    </div>
-                <?php endif; ?>
-            </div>
-        </div>
     </div>
 
     <script>
