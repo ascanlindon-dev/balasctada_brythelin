@@ -111,12 +111,11 @@ class Migration_NewTables extends Migration {
             )
         ));
         $this->dbforge->add_key('cart_id', TRUE);
+        $this->dbforge->create_table('cart', TRUE);
         
-        // Add foreign key constraints
+        // Add foreign key constraints after table creation
         $this->db->query('ALTER TABLE cart ADD CONSTRAINT fk_cart_buyer FOREIGN KEY (buyer_id) REFERENCES buyers(buyer_id) ON DELETE CASCADE ON UPDATE CASCADE');
         $this->db->query('ALTER TABLE cart ADD CONSTRAINT fk_cart_product FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE ON UPDATE CASCADE');
-        
-        $this->dbforge->create_table('cart', TRUE);
 
     }
 

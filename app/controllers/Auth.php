@@ -7,6 +7,7 @@ class Auth extends Controller {
         parent::__construct();
         $this->call->model('User');
         $this->call->model('Product');
+        $this->call->model('Cart');
     }
     
     /**
@@ -105,6 +106,7 @@ class Auth extends Controller {
             $data['orders'] = array();
             $data['cart_items'] = array();
             $data['cart_total'] = 0;
+            $data['cart_count'] = $this->Cart->get_cart_count($data['user']['buyer_id']);
             $data['buying_stats'] = array();
             $data['recent_orders'] = array();
         } catch (Exception $e) {
@@ -114,6 +116,7 @@ class Auth extends Controller {
             $data['orders'] = array();
             $data['cart_items'] = array();
             $data['cart_total'] = 0;
+            $data['cart_count'] = 0;
             $data['buying_stats'] = array(
                 'total_orders' => 0,
                 'total_spent' => 0,
