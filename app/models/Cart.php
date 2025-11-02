@@ -54,12 +54,19 @@ class Cart extends Model {
      */
     public function get_cart_items($buyer_id) {
         try {
-            return $this->db->table('cart c')
+            // Debug logging
+            error_log("Cart::get_cart_items - buyer_id: $buyer_id");
+            
+            $result = $this->db->table('cart c')
                            ->join('products p', 'c.product_id = p.product_id')
                            ->where('c.buyer_id', $buyer_id)
                            ->select('c.cart_id, c.quantity, p.product_id, p.product_name, p.price, p.image_url, p.stock')
                            ->get_all();
+            
+            error_log("Cart::get_cart_items - result: " . print_r($result, true));
+            return $result;
         } catch (Exception $e) {
+            error_log("Cart::get_cart_items - Exception: " . $e->getMessage());
             throw new Exception("Database error in get_cart_items: " . $e->getMessage());
         }
     }
